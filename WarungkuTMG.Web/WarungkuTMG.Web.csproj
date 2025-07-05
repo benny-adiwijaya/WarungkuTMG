@@ -18,4 +18,8 @@
     <ProjectReference Include="..\WarungkuTMG.Infrastructure\WarungkuTMG.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\images\ProductImages\" />
+  </ItemGroup>
+
 </Project>
