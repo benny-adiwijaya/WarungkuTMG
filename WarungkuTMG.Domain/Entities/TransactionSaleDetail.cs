@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -20,9 +21,9 @@ namespace WarungkuTMG.Domain.Entities
         public Product? Product { get; set; }
 
         public int Quantity { get; set; }
-        [Column(TypeName = "decimal(18,2)")]
+        [Range(0, 9999999999)]
         public decimal Price { get; set; }
-        [Column(TypeName = "decimal(18,2)")]
+        [Range(0, 9999999999)]
         public decimal Subtotal => Quantity * Price;
     }
 }
