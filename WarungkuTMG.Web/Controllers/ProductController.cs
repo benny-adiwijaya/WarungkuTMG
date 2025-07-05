@@ -7,7 +7,7 @@ using WarungkuTMG.Infrastructure.Data;
 
 namespace WarungkuTMG.Web.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class ProductController : Controller
     {
         private readonly IProductService _productService;
