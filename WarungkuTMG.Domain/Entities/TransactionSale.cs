@@ -20,19 +20,19 @@ namespace WarungkuTMG.Domain.Entities
         [Required]
         [StringLength(100)]
         public required string CustomerName { get; set; }
-        [Range(0, 9999999999)]
+        [Column(TypeName = "decimal(18,0)")]
 
         public decimal DiscountPercentage { get; set; }
-        [Range(0, 9999999999)]
+        [Column(TypeName = "decimal(18,0)")]
 
         public decimal VoucherAmount { get; set; }
-        [Range(0, 9999999999)]
+        [Column(TypeName = "decimal(18,0)")]
 
         public decimal Total { get; set; }
-        [Range(0, 9999999999)]
+        [Column(TypeName = "decimal(18,0)")]
 
         public decimal DiscountAmount => Total * (DiscountPercentage / 100);
-        [Range(0, 9999999999)]
+        [Column(TypeName = "decimal(18,0)")]
         public decimal GrandTotal => Total - DiscountAmount - VoucherAmount;
 
         [Required]

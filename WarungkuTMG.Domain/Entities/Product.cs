@@ -16,7 +16,7 @@ namespace WarungkuTMG.Domain.Entities
         public required string Name { get; set; }
         [StringLength(250)]
         public string? Description { get; set; }
-        [Range(0, 9999999999)]
+        [Column(TypeName = "decimal(18,0)")]
         public decimal Price { get; set; }
         [Display(Name = "Image Url")]
         [StringLength(250)]
