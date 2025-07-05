@@ -32,7 +32,7 @@ namespace WarungkuTMG.Infrastructure.Data
                     Price = 15000.00m,
                     ImageUrl = "https://placehold.co/600x400",
                     CreatedBy = "System",
-                    CreatedDate = DateTime.UtcNow,
+                    CreatedDate = DateTime.Now,
                 },
                 new Product
                 {
@@ -42,7 +42,7 @@ namespace WarungkuTMG.Infrastructure.Data
                     Price = 12000.00m,
                     ImageUrl = "https://placehold.co/600x400",
                     CreatedBy = "System",
-                    CreatedDate = DateTime.UtcNow,
+                    CreatedDate = DateTime.Now,
                 }
             );
 
