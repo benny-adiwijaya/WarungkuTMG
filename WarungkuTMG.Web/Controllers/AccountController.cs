@@ -152,20 +152,13 @@ namespace WarungkuTMG.Web.Controllers
                 if (result.Succeeded)
                 {
                     var user = await _userManager.FindByNameAsync(loginVM.UserName);
-                    if (await _userManager.IsInRoleAsync(user, SD.Role_Administrator))
+                    if (string.IsNullOrEmpty(loginVM.RedirectUrl))
                     {
                         return RedirectToAction("Index", "Home");
                     }
                     else
                     {
-                        if (string.IsNullOrEmpty(loginVM.RedirectUrl))
-                        {
-                            return RedirectToAction("Index", "Home");
-                        }
-                        else
-                        {
-                            return LocalRedirect(loginVM.RedirectUrl);
-                        }
+                        return LocalRedirect(loginVM.RedirectUrl);
                     }
                 }
                 else

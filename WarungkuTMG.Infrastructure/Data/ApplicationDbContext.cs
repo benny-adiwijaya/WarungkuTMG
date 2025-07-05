@@ -39,7 +39,9 @@ namespace WarungkuTMG.Infrastructure.Data
                     Name = "Nasi Goreng",
                     Description = "Nasi goreng dengan ayam dan sayuran",
                     Price = 15000,
-                    ImageUrl = "https://placehold.co/600x400"
+                    ImageUrl = "https://placehold.co/600x400",
+                    CreatedBy = "admin",
+                    CreatedDate = DateTime.Now
                 },
                 new Product
                 {
@@ -47,7 +49,9 @@ namespace WarungkuTMG.Infrastructure.Data
                     Name = "Mie Goreng",
                     Description = "Mie goreng dengan telur dan sayuran",
                     Price = 12000,
-                    ImageUrl = "https://placehold.co/600x400"
+                    ImageUrl = "https://placehold.co/600x400",
+                    CreatedBy = "admin",
+                    CreatedDate = DateTime.Now
                 }
             );
 
@@ -125,22 +129,22 @@ namespace WarungkuTMG.Infrastructure.Data
             }
             try
             {
-                var userId = "";
+                var userName = "";
                 if (_httpContextAccessor.HttpContext == null)
                 {
                     return;
                 }
-                if (!_httpContextAccessor.HttpContext.User.HasClaim(c => c.Type == ClaimTypes.NameIdentifier))
+                if (!_httpContextAccessor.HttpContext.User.HasClaim(c => c.Type == ClaimTypes.Name))
                 {
-                    userId = "Anonymous";
+                    userName = "Anonymous";
                 }
                 else
                 {
-                    userId = _httpContextAccessor.HttpContext.User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value;
+                    userName = _httpContextAccessor.HttpContext.User.FindFirst(c => c.Type == ClaimTypes.Name).Value;
                 }
 
-                var currentUsername = !string.IsNullOrEmpty(userId)
-                    ? userId
+                var currentUsername = !string.IsNullOrEmpty(userName)
+                    ? userName
                     : "Anonymous";
 
                 if (entities.FirstOrDefault().Entity is BaseEntity)
