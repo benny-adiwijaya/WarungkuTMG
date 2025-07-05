@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using WarungkuTMG.Domain.Entities;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace WarungkuTMG.Infrastructure.Data
 {
@@ -14,9 +16,12 @@ namespace WarungkuTMG.Infrastructure.Data
     ApplicationUserRole, IdentityUserLogin<string>,
     IdentityRoleClaim<string>, IdentityUserToken<string>>
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options,
+            IHttpContextAccessor httpContextAccessor)
             : base(options)
         {
+            _httpContextAccessor = httpContextAccessor;
         }
         // DbSet properties for your entities go here
         public DbSet<Product> Products { get; set; }
@@ -34,9 +39,7 @@ namespace WarungkuTMG.Infrastructure.Data
                     Name = "Nasi Goreng",
                     Description = "Nasi goreng dengan ayam dan sayuran",
                     Price = 15000,
-                    ImageUrl = "https://placehold.co/600x400",
-                    CreatedBy = "System",
-                    CreatedDate = DateTime.Now,
+                    ImageUrl = "https://placehold.co/600x400"
                 },
                 new Product
                 {
@@ -44,9 +47,7 @@ namespace WarungkuTMG.Infrastructure.Data
                     Name = "Mie Goreng",
                     Description = "Mie goreng dengan telur dan sayuran",
                     Price = 12000,
-                    ImageUrl = "https://placehold.co/600x400",
-                    CreatedBy = "System",
-                    CreatedDate = DateTime.Now,
+                    ImageUrl = "https://placehold.co/600x400"
                 }
             );
 
@@ -101,6 +102,94 @@ namespace WarungkuTMG.Infrastructure.Data
                     .IsRequired();
                 b.ToTable("UserRoles");
             });
+        }
+
+        public override int SaveChanges()
+        {
+            AddTimestamps();
+            return base.SaveChanges();
+        }
+
+
+
+        private void AddTimestamps()
+        {
+            var entities = ChangeTracker
+                .Entries()
+                .Where(x => x.Entity is BaseEntity || x.Entity is ApplicationUser
+                && (x.State == EntityState.Added
+                || x.State == EntityState.Modified));
+            if (entities.FirstOrDefault() == null)
+            {
+                return;
+            }
+            try
+            {
+                var userId = "";
+                if (_httpContextAccessor.HttpContext == null)
+                {
+                    return;
+                }
+                if (!_httpContextAccessor.HttpContext.User.HasClaim(c => c.Type == ClaimTypes.NameIdentifier))
+                {
+                    userId = "Anonymous";
+                }
+                else
+                {
+                    userId = _httpContextAccessor.HttpContext.User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value;
+                }
+
+                var currentUsername = !string.IsNullOrEmpty(userId)
+                    ? userId
+                    : "Anonymous";
+
+                if (entities.FirstOrDefault().Entity is BaseEntity)
+                {
+                    foreach (var entity in entities)
+                    {
+                        if (entity.State == EntityState.Added)
+                        {
+                            ((BaseEntity)entity.Entity).CreatedDate = DateTime.Now;
+                            if (currentUsername != "Anonymous")
+                            {
+                                ((BaseEntity)entity.Entity).CreatedBy = currentUsername;
+                            }
+                        }
+                        else
+                        {
+                            ((BaseEntity)entity.Entity).ModifiedDate = DateTime.Now;
+                            if (currentUsername != "Anonymous")
+                            {
+                                ((BaseEntity)entity.Entity).ModifiedBy = currentUsername;
+                            }
+                        }
+
+                            
+                    }
+                }
+                else
+                {
+                    foreach (var entity in entities)
+                    {
+                        if (entity.State == EntityState.Added)
+                        {
+                            ((ApplicationUser)entity.Entity).CreatedDate = DateTime.Now;
+                            ((ApplicationUser)entity.Entity).CreatedBy = currentUsername;
+                        }
+                        else
+                        {
+                            ((ApplicationUser)entity.Entity).ModifiedDate = DateTime.Now;
+                            ((ApplicationUser)entity.Entity).ModifiedBy = currentUsername;
+                        }
+                    }
+                }
+
+            }
+            catch (Exception)
+            {
+
+            }
+
         }
     }
 }

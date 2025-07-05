@@ -60,12 +60,10 @@ namespace WarungkuTMG.Web.Controllers
             {
                 _roleManager.CreateAsync(new ApplicationRole()
                 {
-                    CreatedBy = "System",
                     Name = SD.Role_Administrator,
                 }).Wait();
                 _roleManager.CreateAsync(new ApplicationRole()
                 {
-                    CreatedBy = "System",
                     Name = SD.Role_User,
                 }).Wait();
             }
@@ -102,8 +100,7 @@ namespace WarungkuTMG.Web.Controllers
                     NormalizedEmail = registerVM.Email.ToUpper(),
                     EmailConfirmed = true,
                     UserName = registerVM.UserName,
-                    CreatedDate = DateTime.Now,
-                    CreatedBy = "System"
+                    CreatedDate = DateTime.Now
                 };
 
                 var result = await _userManager.CreateAsync(user, registerVM.Password);

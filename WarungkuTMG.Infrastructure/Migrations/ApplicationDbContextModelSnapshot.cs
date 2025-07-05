@@ -126,7 +126,6 @@ namespace WarungkuTMG.Infrastructure.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("CreatedBy")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
@@ -185,7 +184,6 @@ namespace WarungkuTMG.Infrastructure.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("CreatedBy")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
@@ -294,7 +292,6 @@ namespace WarungkuTMG.Infrastructure.Migrations
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CreatedBy")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
@@ -342,24 +339,18 @@ namespace WarungkuTMG.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedBy = "System",
-                            CreatedDate = new DateTime(2025, 7, 5, 22, 30, 4, 651, DateTimeKind.Local).AddTicks(4871),
                             Description = "Nasi goreng dengan ayam dan sayuran",
                             ImageUrl = "https://placehold.co/600x400",
                             IsDisabled = false,
-                            ModifiedDate = new DateTime(2025, 7, 5, 22, 30, 4, 651, DateTimeKind.Local).AddTicks(4868),
                             Name = "Nasi Goreng",
                             Price = 15000m
                         },
                         new
                         {
                             Id = 2,
-                            CreatedBy = "System",
-                            CreatedDate = new DateTime(2025, 7, 5, 22, 30, 4, 651, DateTimeKind.Local).AddTicks(4876),
                             Description = "Mie goreng dengan telur dan sayuran",
                             ImageUrl = "https://placehold.co/600x400",
                             IsDisabled = false,
-                            ModifiedDate = new DateTime(2025, 7, 5, 22, 30, 4, 651, DateTimeKind.Local).AddTicks(4874),
                             Name = "Mie Goreng",
                             Price = 12000m
                         });
@@ -374,7 +365,6 @@ namespace WarungkuTMG.Infrastructure.Migrations
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CreatedBy")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
@@ -434,7 +424,6 @@ namespace WarungkuTMG.Infrastructure.Migrations
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CreatedBy")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 

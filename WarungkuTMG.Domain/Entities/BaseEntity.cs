@@ -9,12 +9,12 @@ namespace WarungkuTMG.Domain.Entities
 {
     public class BaseEntity
     {
-        public DateTime? CreatedDate { get; set; } = DateTime.Now;
+        public DateTime? CreatedDate { get; set; }
 
-        public DateTime? ModifiedDate { get; set; } = DateTime.Now;
+        public DateTime? ModifiedDate { get; set; }
 
         [StringLength(100)]
-        public required string CreatedBy { get; set; }
+        public string? CreatedBy { get; set; }
 
         [StringLength(100)]
         public string? ModifiedBy { get; set; }

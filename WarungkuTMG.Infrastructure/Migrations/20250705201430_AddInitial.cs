@@ -32,7 +32,7 @@ namespace WarungkuTMG.Infrastructure.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     CreatedDate = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     ModifiedDate = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    CreatedBy = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                    CreatedBy = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ModifiedBy = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -57,7 +57,7 @@ namespace WarungkuTMG.Infrastructure.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     CreatedDate = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     ModifiedDate = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    CreatedBy = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                    CreatedBy = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ModifiedBy = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -94,7 +94,7 @@ namespace WarungkuTMG.Infrastructure.Migrations
                     PaymentType = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     ModifiedDate = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    CreatedBy = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                    CreatedBy = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ModifiedBy = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -121,7 +121,7 @@ namespace WarungkuTMG.Infrastructure.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     CreatedDate = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     ModifiedDate = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    CreatedBy = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                    CreatedBy = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ModifiedBy = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -195,7 +195,7 @@ namespace WarungkuTMG.Infrastructure.Migrations
                     Price = table.Column<decimal>(type: "decimal(18,0)", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     ModifiedDate = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    CreatedBy = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                    CreatedBy = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ModifiedBy = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -329,8 +329,8 @@ namespace WarungkuTMG.Infrastructure.Migrations
                 columns: new[] { "Id", "CreatedBy", "CreatedDate", "Description", "DisabledBy", "DisabledDate", "ImageUrl", "IsDisabled", "ModifiedBy", "ModifiedDate", "Name", "Price" },
                 values: new object[,]
                 {
-                    { 1, "System", new DateTime(2025, 7, 5, 22, 30, 4, 651, DateTimeKind.Local).AddTicks(4871), "Nasi goreng dengan ayam dan sayuran", null, null, "https://placehold.co/600x400", false, null, new DateTime(2025, 7, 5, 22, 30, 4, 651, DateTimeKind.Local).AddTicks(4868), "Nasi Goreng", 15000m },
-                    { 2, "System", new DateTime(2025, 7, 5, 22, 30, 4, 651, DateTimeKind.Local).AddTicks(4876), "Mie goreng dengan telur dan sayuran", null, null, "https://placehold.co/600x400", false, null, new DateTime(2025, 7, 5, 22, 30, 4, 651, DateTimeKind.Local).AddTicks(4874), "Mie Goreng", 12000m }
+                    { 1, null, null, "Nasi goreng dengan ayam dan sayuran", null, null, "https://placehold.co/600x400", false, null, null, "Nasi Goreng", 15000m },
+                    { 2, null, null, "Mie goreng dengan telur dan sayuran", null, null, "https://placehold.co/600x400", false, null, null, "Mie Goreng", 12000m }
                 });
 
             migrationBuilder.CreateIndex(

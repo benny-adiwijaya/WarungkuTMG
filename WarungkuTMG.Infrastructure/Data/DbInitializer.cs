@@ -35,9 +35,7 @@ public class DbInitializer : IDbInitializer
             {
                 var role = new ApplicationRole
                 {
-                    Name = SD.Role_Administrator,
-                    CreatedBy = "System",
-                    CreatedDate = DateTime.Now
+                    Name = SD.Role_Administrator
                 };
                 _roleManager.CreateAsync(role).GetAwaiter().GetResult();;
             }
@@ -46,9 +44,7 @@ public class DbInitializer : IDbInitializer
             {
                 var role = new ApplicationRole
                 {
-                    Name = SD.Role_User,
-                    CreatedBy = "System",
-                    CreatedDate = DateTime.Now
+                    Name = SD.Role_User
                 };
                 _roleManager.CreateAsync(role).GetAwaiter().GetResult();
             }
@@ -60,11 +56,10 @@ public class DbInitializer : IDbInitializer
                     UserName = "admin",
                     Email = "admin@pttmg.com",
                     Name = "Smith Wong",
-                    NormalizedUserName = "ADMIN@PTTMG.COM",
+                    NormalizedUserName = "ADMIN",
                     NormalizedEmail = "ADMIN@PTTMG.COM",
                     PhoneNumber = "1112223333",
-                    CreatedBy = "System",
-                    CreatedDate = DateTime.Now
+                    ImageUrl = "https://placehold.co/600x400"
 
                 };
 
@@ -72,6 +67,27 @@ public class DbInitializer : IDbInitializer
                 if (result.Succeeded)
                 {
                     _userManager.AddToRoleAsync(user, SD.Role_Administrator).GetAwaiter().GetResult();
+                }
+            }
+
+            if (_userManager.FindByNameAsync("joe").GetAwaiter().GetResult() == null)
+            {
+                var user = new ApplicationUser
+                {
+                    UserName = "joe",
+                    Email = "joe@pttmg.com",
+                    Name = "Joe Carlos",
+                    NormalizedUserName = "JOE",
+                    NormalizedEmail = "ADMIN@PTTMG.COM",
+                    PhoneNumber = "2314124512",
+                    ImageUrl = "https://placehold.co/600x400"
+
+                };
+
+                var result = _userManager.CreateAsync(user, "Admin123!").GetAwaiter().GetResult();
+                if (result.Succeeded)
+                {
+                    _userManager.AddToRoleAsync(user, SD.Role_User).GetAwaiter().GetResult();
                 }
             }
         }
