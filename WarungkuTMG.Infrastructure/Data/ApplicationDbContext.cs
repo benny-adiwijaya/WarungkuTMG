@@ -10,7 +10,9 @@ using WarungkuTMG.Domain.Entities;
 
 namespace WarungkuTMG.Infrastructure.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string, IdentityUserClaim<string>,
+    ApplicationUserRole, IdentityUserLogin<string>,
+    IdentityRoleClaim<string>, IdentityUserToken<string>>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -24,6 +26,7 @@ namespace WarungkuTMG.Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Additional model configuration can go here
+            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Product>().HasData(
                 new Product
                 {
@@ -54,11 +57,33 @@ namespace WarungkuTMG.Infrastructure.Data
                 b.Property(u => u.NormalizedUserName).HasMaxLength(128);
             });
 
+            modelBuilder.Entity<IdentityUserClaim<string>>(b =>
+            {
+                b.ToTable("UserClaims");
+                b.Property(u => u.Id).HasMaxLength(128);
+            });
+
+            modelBuilder.Entity<IdentityUserLogin<string>>(b =>
+            {
+                b.ToTable("UserLogins");
+            });
+
+            modelBuilder.Entity<IdentityUserToken<string>>(b =>
+            {
+                b.ToTable("UserTokens");
+            });
+
             modelBuilder.Entity<ApplicationRole>(b =>
             {
                 b.ToTable("Roles");
                 b.Property(u => u.Id).HasMaxLength(128);
                 b.Property(u => u.NormalizedName).HasMaxLength(128);
+            });
+
+            modelBuilder.Entity<IdentityRoleClaim<string>>(b =>
+            {
+                b.ToTable("RoleClaims");
+                b.Property(u => u.Id).HasMaxLength(128);
             });
 
             modelBuilder.Entity<ApplicationUserRole>(b =>
