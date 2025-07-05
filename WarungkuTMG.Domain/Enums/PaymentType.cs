@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WarungkuTMG.Domain.Entities
+namespace WarungkuTMG.Domain.Enums
 {
     public enum PaymentType
     {

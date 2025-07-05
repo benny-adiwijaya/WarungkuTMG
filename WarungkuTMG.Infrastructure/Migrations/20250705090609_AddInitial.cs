@@ -37,6 +37,28 @@ namespace WarungkuTMG.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Roles",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    DisabledDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDisabled = table.Column<bool>(type: "bit", nullable: false),
+                    DisabledBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NormalizedName = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Roles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "TransactionSales",
                 columns: table => new
                 {
@@ -59,6 +81,40 @@ namespace WarungkuTMG.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TransactionSales", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    ImageUrl = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    DisabledDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDisabled = table.Column<bool>(type: "bit", nullable: false),
+                    DisabledBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -96,13 +152,37 @@ namespace WarungkuTMG.Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "UserRoles",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(type: "nvarchar(128)", nullable: false),
+                    RoleId = table.Column<string>(type: "nvarchar(128)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserRoles", x => new { x.UserId, x.RoleId });
+                    table.ForeignKey(
+                        name: "FK_UserRoles_Roles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "Roles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserRoles_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "Products",
                 columns: new[] { "Id", "CreatedBy", "CreatedDate", "Description", "DisabledBy", "DisabledDate", "ImageUrl", "IsDisabled", "ModifiedBy", "ModifiedDate", "Name", "Price" },
                 values: new object[,]
                 {
-                    { 1, "System", new DateTime(2025, 7, 5, 7, 26, 16, 724, DateTimeKind.Utc).AddTicks(8141), "Nasi goreng dengan ayam dan sayuran", null, null, "https://placehold.co/600x400", false, null, new DateTime(2025, 7, 5, 14, 26, 16, 724, DateTimeKind.Local).AddTicks(8137), "Nasi Goreng", 15000.00m },
-                    { 2, "System", new DateTime(2025, 7, 5, 7, 26, 16, 724, DateTimeKind.Utc).AddTicks(8144), "Mie goreng dengan telur dan sayuran", null, null, "https://placehold.co/600x400", false, null, new DateTime(2025, 7, 5, 14, 26, 16, 724, DateTimeKind.Local).AddTicks(8143), "Mie Goreng", 12000.00m }
+                    { 1, "System", new DateTime(2025, 7, 5, 9, 6, 7, 324, DateTimeKind.Utc).AddTicks(7594), "Nasi goreng dengan ayam dan sayuran", null, null, "https://placehold.co/600x400", false, null, new DateTime(2025, 7, 5, 16, 6, 7, 324, DateTimeKind.Local).AddTicks(7590), "Nasi Goreng", 15000.00m },
+                    { 2, "System", new DateTime(2025, 7, 5, 9, 6, 7, 324, DateTimeKind.Utc).AddTicks(7597), "Mie goreng dengan telur dan sayuran", null, null, "https://placehold.co/600x400", false, null, new DateTime(2025, 7, 5, 16, 6, 7, 324, DateTimeKind.Local).AddTicks(7596), "Mie Goreng", 12000.00m }
                 });
 
             migrationBuilder.CreateIndex(
@@ -114,6 +194,11 @@ namespace WarungkuTMG.Infrastructure.Migrations
                 name: "IX_TransactionSaleDetails_TransactionSaleId",
                 table: "TransactionSaleDetails",
                 column: "TransactionSaleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserRoles_RoleId",
+                table: "UserRoles",
+                column: "RoleId");
         }
 
         /// <inheritdoc />
@@ -123,10 +208,19 @@ namespace WarungkuTMG.Infrastructure.Migrations
                 name: "TransactionSaleDetails");
 
             migrationBuilder.DropTable(
+                name: "UserRoles");
+
+            migrationBuilder.DropTable(
                 name: "Products");
 
             migrationBuilder.DropTable(
                 name: "TransactionSales");
+
+            migrationBuilder.DropTable(
+                name: "Roles");
+
+            migrationBuilder.DropTable(
+                name: "Users");
         }
     }
 }

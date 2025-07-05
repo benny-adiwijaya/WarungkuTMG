@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,6 +45,36 @@ namespace WarungkuTMG.Infrastructure.Data
                     CreatedDate = DateTime.UtcNow,
                 }
             );
+
+            modelBuilder.Entity<ApplicationUser>(b =>
+            {
+                b.ToTable("Users");
+                b.Property(u => u.Id).HasMaxLength(128);
+                b.Property(u => u.NormalizedUserName).HasMaxLength(128);
+            });
+
+            modelBuilder.Entity<ApplicationRole>(b =>
+            {
+                b.ToTable("Roles");
+                b.Property(u => u.Id).HasMaxLength(128);
+                b.Property(u => u.NormalizedName).HasMaxLength(128);
+            });
+
+            modelBuilder.Entity<ApplicationUserRole>(b =>
+            {
+                b.HasKey(ur => new { ur.UserId, ur.RoleId });
+
+                b.HasOne(ur => ur.Role)
+                    .WithMany(r => r.UserRoles)
+                    .HasForeignKey(ur => ur.RoleId)
+                    .IsRequired();
+
+                b.HasOne(ur => ur.User)
+                    .WithMany(r => r.UserRoles)
+                    .HasForeignKey(ur => ur.UserId)
+                    .IsRequired();
+                b.ToTable("UserRoles");
+            });
         }
     }
 }
