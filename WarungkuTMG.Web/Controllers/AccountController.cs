@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using WarungkuTMG.Application.Common.Interfaces;
 using WarungkuTMG.Application.Common.Utility;
 using WarungkuTMG.Domain.Entities;
@@ -168,6 +169,33 @@ namespace WarungkuTMG.Web.Controllers
             }
 
             return View(loginVM);
+        }
+        
+        public IActionResult Index()
+        {
+            var users = _userManager.Users.Include(q => q.UserRoles).ThenInclude(q => q.Role).ToList();
+            return View(users);
+        }
+        
+        public IActionResult Update(string applicationUserId, string returnUrl = null)
+        {
+            ApplicationUser? user = _userManager.Users.Include(q => q.UserRoles).ThenInclude(q => q.Role).FirstOrDefault(x => x.Id == applicationUserId);;
+            if (user == null)
+            {
+                return RedirectToAction("Error", "Home");
+            }
+            var role = user.UserRoles.FirstOrDefault(x => x.Role.Name == SD.Role_Administrator)?.Role.Name;
+            var obj = new ApplicationUserVM
+            {
+                ApplicationUser = user,
+                Role = role,
+                RoleList = _roleManager.Roles.Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Name
+                })
+            };
+            return View(obj);
         }
     }
 }

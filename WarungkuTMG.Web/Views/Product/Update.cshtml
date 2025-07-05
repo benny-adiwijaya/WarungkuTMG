@@ -42,11 +42,11 @@
                         <span asp-validation-for="ImageUrl" class="text-danger"></span>
                     </div>
                     <div class="form-floating py-1 col-12">
-                        <input class="form-control border shadow" disabled value="@(Model?.CreatedBy + " - " + Model?.CreatedDate?.ToString("f"))" />
+                        <input class="form-control border shadow" readonly value="@(Model?.CreatedBy + " - " + Model?.CreatedDate?.ToString("f"))" />
                         <label class="ms-2">Created</label>
                     </div>
                     <div class="form-floating py-1 col-12">
-                        <input class="form-control border shadow" disabled value="@(Model?.ModifiedBy + " - " + Model?.ModifiedDate?.ToString("f"))" />
+                        <input class="form-control border shadow" readonly value="@(Model?.ModifiedBy + " - " + Model?.ModifiedDate?.ToString("f"))" />
                         <label class="ms-2">Last Modified</label>
                     </div>
                     <div class="row pt-2">

@@ -1,20 +1,20 @@
-﻿@model IEnumerable<Product>
+﻿@model IEnumerable<ApplicationUser>
 @{
-    ViewData["Title"] = "Product";
+    ViewData["Title"] = "User";
 }
 <div class="w-100 card border-0 p-4">
     <div class="card-header bg-primary bg-gradient ml-0 py-3">
         <div class="row">
             <div class="col-12 text-center">
-                <h2 class="text-white py-2">Product List</h2>
+                <h2 class="text-white py-2">User List</h2>
             </div>
         </div>
     </div>
     <div class="card-body border p-4">
         <div class="row pb-3">
             <div class="col-6 offset-6 text-end">
-                <a asp-controller="Product" asp-action="Create" class="btn btn-warning">
-                    <i class="bi bi-plus-circle"></i> Create New Product
+                <a asp-controller="Account" asp-action="Register" class="btn btn-warning">
+                    <i class="bi bi-plus-circle"></i> Register New User
                 </a>
             </div>
         </div>
@@ -26,9 +26,9 @@
                 <th>
                     Name
                 </th>
-                <th>Price</th>
-                <th>Description</th>
-                <th>Occupancy</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+                <th>Role</th>
             </tr>
             </thead>
             <tbody>
@@ -38,20 +38,21 @@
                         <td>
                             @if (!string.IsNullOrEmpty(obj.ImageUrl))
                             {
-                                <img src="@Url.Content(obj.ImageUrl)" alt="Product Image"
+                                <img src="@Url.Content(obj.ImageUrl)" alt="User Image"
                                      width="100" style="border-radius:5px; border:1px solid #ccc;" />
                             }
                         </td>
                         <td>@obj.Name</td>
-                        <td>@obj.Price.ToString("0", CultureInfo.InvariantCulture)</td>
-                        <td>@obj.Description</td>
+                        <td>@obj.Email</td>
+                        <td>@obj.PhoneNumber</td>
+                        <td>@obj.UserRoles.FirstOrDefault().Role.Name</td>
                         <td>
                             <div class="w-75 btn-group" role="group">
-                                <a asp-controller="Product" asp-action="Update" asp-route-productId="@obj.Id"
+                                <a asp-controller="Account" asp-action="Update" asp-route-applicationUserId="@obj.Id"
                                    class="btn btn-success mx-2">
                                     <i class="bi bi-pencil-square"></i> Edit
                                 </a>
-                                <a asp-controller="Product" asp-action="Delete" asp-route-productId="@obj.Id"
+                                <a asp-controller="Account" asp-action="Delete" asp-route-applicationUserId="@obj.Id"
                                    class="btn btn-danger mx-2">
                                     <i class="bi bi-trash-fill"></i> Delete
                                 </a>
