@@ -10,4 +10,10 @@
     <ProjectReference Include="..\WarungkuTMG.Domain\WarungkuTMG.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Common\Utility\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Common\Utility\" />
+  </ItemGroup>
 </Project>

@@ -21,11 +21,11 @@
             <thead>
                 <tr>
                     <th>
-                        ID
+                        Name
                     </th>
-                    <th>Name</th>
                     <th>Price</th>
                     <th>Description</th>
+                    <th>Occupancy</th>
                     <th></th>
                 </tr>
             </thead>
@@ -33,7 +33,6 @@
                 @foreach (var obj in Model)
                 {
                     <tr>
-                        <td>@obj.Id</td>
                         <td>@obj.Name</td>
                         <td>@obj.Price</td>
                         <td>@obj.Description</td>
