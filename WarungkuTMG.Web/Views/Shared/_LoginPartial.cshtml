@@ -8,7 +8,11 @@
     @if (SignInManager.IsSignedIn(User))
     {
         var currentUser = await UserManager.GetUserAsync(User);
-        var isAdmin = await UserManager.IsInRoleAsync(currentUser, "Administrator");
+        var isAdmin = false;
+        if (currentUser != null)
+        {
+            isAdmin = await UserManager.IsInRoleAsync(currentUser, "Administrator");
+        }
         <li class="nav-item">
             <a class="nav-link" href="#">Hello @UserManager.GetUserName(User)</a>
         </li>

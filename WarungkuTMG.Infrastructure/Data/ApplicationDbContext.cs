@@ -114,6 +114,13 @@ namespace WarungkuTMG.Infrastructure.Data
             return base.SaveChanges();
         }
 
+        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess,
+            CancellationToken cancellationToken = default)
+        {
+            AddTimestamps();
+            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        }
+
 
 
         private void AddTimestamps()

@@ -45,6 +45,7 @@ namespace WarungkuTMG.Web
             builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddScoped<ITransactionSaleService, TransactionSaleService>();
             builder.Services.AddScoped<ITransactionSaleDetailService, TransactionSaleDetailService>();
+            builder.Services.AddScoped<IApplicationUserService, ApplicationUserService>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

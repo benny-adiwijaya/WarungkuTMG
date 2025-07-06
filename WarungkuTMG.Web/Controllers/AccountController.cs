@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WarungkuTMG.Application.Common.Interfaces;
 using WarungkuTMG.Application.Common.Utility;
+using WarungkuTMG.Application.Services.Interfaces;
 using WarungkuTMG.Domain.Entities;
 using WarungkuTMG.Web.ViewModels;
 
@@ -13,18 +14,22 @@ namespace WarungkuTMG.Web.Controllers
     public class AccountController : Controller
     {
         
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly RoleManager<ApplicationRole> _roleManager;
+        // private readonly UserManager<ApplicationUser> _userManager;
+        // private readonly SignInManager<ApplicationUser> _signInManager;
+        // private readonly RoleManager<ApplicationRole> _roleManager;
+        
+        private readonly IApplicationUserService _applicationUserService;
 
         public AccountController(
-            UserManager<ApplicationUser> userManager,
-            RoleManager<ApplicationRole> roleManager,
-            SignInManager<ApplicationUser> signInManager)
+            // UserManager<ApplicationUser> userManager,
+            // RoleManager<ApplicationRole> roleManager,
+            // SignInManager<ApplicationUser> signInManager, 
+            IApplicationUserService applicationUserService)
         {
-            _roleManager = roleManager;
-            _userManager = userManager;
-            _signInManager = signInManager;
+            // _roleManager = roleManager;
+            // _userManager = userManager;
+            // _signInManager = signInManager;
+            _applicationUserService = applicationUserService;
         }
 
         public IActionResult Login(string returnUrl=null)
@@ -41,10 +46,40 @@ namespace WarungkuTMG.Web.Controllers
 
             return View(loginVM);
         }
+        
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginVM loginVM)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _applicationUserService
+                    .SignIn(loginVM.UserName, loginVM.Password, loginVM.RememberMe, lockoutOnFailure:false);
+
+
+                if (result.Succeeded)
+                {
+                    var user = _applicationUserService.FindByUserName(loginVM.UserName);
+                    if (string.IsNullOrEmpty(loginVM.RedirectUrl))
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
+                    else
+                    {
+                        return LocalRedirect(loginVM.RedirectUrl);
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Invalid login attempt.");
+                }
+            }
+
+            return View(loginVM);
+        }
 
         public async Task<IActionResult> Logout()
         {
-            await _signInManager.SignOutAsync();
+            await _applicationUserService.SignOut();
             return RedirectToAction("Index", "Home");
         }
 
@@ -57,13 +92,13 @@ namespace WarungkuTMG.Web.Controllers
         public IActionResult Register(string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
-            if (!_roleManager.RoleExistsAsync(SD.Role_Administrator).GetAwaiter().GetResult())
+            if (!_applicationUserService.RoleExist(SD.Role_Administrator))
             {
-                _roleManager.CreateAsync(new ApplicationRole()
+                _applicationUserService.CreateRole(new ApplicationRole()
                 {
                     Name = SD.Role_Administrator,
                 }).Wait();
-                _roleManager.CreateAsync(new ApplicationRole()
+                _applicationUserService.CreateRole(new ApplicationRole()
                 {
                     Name = SD.Role_User,
                 }).Wait();
@@ -71,7 +106,7 @@ namespace WarungkuTMG.Web.Controllers
 
             RegisterVM registerVM = new ()
             {
-                RoleList = _roleManager.Roles.Select(x => new SelectListItem
+                RoleList = _applicationUserService.GetAllRoles().Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Name
@@ -100,26 +135,28 @@ namespace WarungkuTMG.Web.Controllers
                     PhoneNumber = registerVM.PhoneNumber,
                     NormalizedEmail = registerVM.Email.ToUpper(),
                     EmailConfirmed = true,
+                    ImageUrl = registerVM.ImageUrl ?? "https://placehold.co/600x400",
+                    Image = registerVM.Image ?? null,
                     UserName = registerVM.UserName,
                     CreatedDate = DateTime.Now
                 };
 
-                var result = await _userManager.CreateAsync(user, registerVM.Password);
+                var result = await _applicationUserService.CreateUser(user, registerVM.Password);
 
                 if (result.Succeeded)
                 {
                     if (!string.IsNullOrEmpty(registerVM.Role))
                     {
-                        await _userManager.AddToRoleAsync(user, registerVM.Role);
+                        await _applicationUserService.AddToRole(user, registerVM.Role);
                     }
                     else
                     {
-                        await _userManager.AddToRoleAsync(user, SD.Role_User);
+                        await _applicationUserService.AddToRole(user, SD.Role_User);
                     }
                     
                     if (string.IsNullOrEmpty(registerVM.RedirectUrl))
                     {
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction(nameof(Index));
                     }
                     else
                     {
@@ -132,7 +169,7 @@ namespace WarungkuTMG.Web.Controllers
                     ModelState.AddModelError("", error.Description);
                 } 
             }
-            registerVM.RoleList = _roleManager.Roles.Select(x => new SelectListItem
+            registerVM.RoleList = _applicationUserService.GetAllRoles().Select(x => new SelectListItem
             {
                 Text = x.Name,
                 Value = x.Name
@@ -140,62 +177,110 @@ namespace WarungkuTMG.Web.Controllers
 
             return View(registerVM);
         }
-
-        [HttpPost]
-        public async Task<IActionResult> Login(LoginVM loginVM)
-        {
-            if (ModelState.IsValid)
-            {
-                var result = await _signInManager
-                    .PasswordSignInAsync(loginVM.UserName, loginVM.Password, loginVM.RememberMe, lockoutOnFailure:false);
-
-
-                if (result.Succeeded)
-                {
-                    var user = await _userManager.FindByNameAsync(loginVM.UserName);
-                    if (string.IsNullOrEmpty(loginVM.RedirectUrl))
-                    {
-                        return RedirectToAction("Index", "Home");
-                    }
-                    else
-                    {
-                        return LocalRedirect(loginVM.RedirectUrl);
-                    }
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Invalid login attempt.");
-                }
-            }
-
-            return View(loginVM);
-        }
         
+        [Authorize]
         public IActionResult Index()
         {
-            var users = _userManager.Users.Include(q => q.UserRoles).ThenInclude(q => q.Role).ToList();
+            var users = _applicationUserService.GetAllUsers();
             return View(users);
         }
         
-        public IActionResult Update(string applicationUserId, string returnUrl = null)
+        public IActionResult Update(string applicationUserId)
         {
-            ApplicationUser? user = _userManager.Users.Include(q => q.UserRoles).ThenInclude(q => q.Role).FirstOrDefault(x => x.Id == applicationUserId);;
+            ApplicationUser? user = _applicationUserService.GetUserById(applicationUserId);;
             if (user == null)
             {
                 return RedirectToAction("Error", "Home");
             }
-            var role = user.UserRoles.FirstOrDefault(x => x.Role.Name == SD.Role_Administrator)?.Role.Name;
+            var role = user.UserRoles?.FirstOrDefault()?.Role?.Name;
             var obj = new ApplicationUserVM
             {
                 ApplicationUser = user,
                 Role = role,
-                RoleList = _roleManager.Roles.Select(x => new SelectListItem
+                RoleList = _applicationUserService.GetAllRoles().Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Name
                 })
             };
             return View(obj);
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> Update(ApplicationUserVM obj)
+        {
+            if (ModelState.IsValid && obj.ApplicationUser.Id is not null)
+            {
+                var existingUser = _applicationUserService.GetUserById(obj.ApplicationUser.Id);
+                if (existingUser is not null)
+                {
+                    existingUser.Name = obj.ApplicationUser.Name;
+                    existingUser.Email = obj.ApplicationUser.Email;
+                    existingUser.PhoneNumber = obj.ApplicationUser.PhoneNumber;
+                    existingUser.NormalizedEmail = obj.ApplicationUser.Email?.ToUpper();
+                    existingUser.ImageUrl = obj.ApplicationUser.ImageUrl;
+                    existingUser.Image = obj.ApplicationUser.Image;
+                    
+                    var result = await _applicationUserService.UpdateUser(existingUser);
+                    if (result.Succeeded)
+                    {
+                        TempData["success"] = "The user has been updated successfully.";
+                        return RedirectToAction(nameof(Index));
+                    }
+                    else
+                    {
+                        TempData["error"] = "Failed to update the user.";
+                    }
+                }
+                else
+                {
+                    TempData["error"] = "Failed to update the user. User not found.";
+                }
+            }
+
+            obj.RoleList = _applicationUserService.GetAllRoles().Select(x => new SelectListItem
+            {
+                Text = x.Name,
+                Value = x.Name
+            });
+            return View(obj);
+        }
+        
+        public IActionResult Delete(string applicationUserId)
+        {
+            ApplicationUser? obj = _applicationUserService.GetUserById(applicationUserId);
+            if (obj is null)
+            {
+                return RedirectToAction("Error", "Home");
+            }
+            return View(obj);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(ApplicationUser obj)
+        {
+            var existingUser = _applicationUserService.GetUserById(obj.Id);
+            if (existingUser is not null)
+            {
+                var result = await _applicationUserService.DeleteUser(existingUser);
+                if (result.Succeeded)
+                {
+                    TempData["success"] = "The user has been deleted successfully.";
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    TempData["error"] = "Failed to delete the user.";
+                }
+            }
+            else
+            {
+                TempData["error"] = "Failed to delete the user. User not found.";
+            }
+            
+            
+            return View();
         }
     }
 }

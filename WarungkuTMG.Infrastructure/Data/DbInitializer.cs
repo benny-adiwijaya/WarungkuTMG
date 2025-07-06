@@ -59,7 +59,10 @@ public class DbInitializer : IDbInitializer
                     NormalizedUserName = "ADMIN",
                     NormalizedEmail = "ADMIN@PTTMG.COM",
                     PhoneNumber = "1112223333",
-                    ImageUrl = "https://placehold.co/600x400"
+                    ImageUrl = "https://placehold.co/600x400",
+                    EmailConfirmed = true,
+                    CreatedDate = DateTime.Now,
+                    CreatedBy = "admin",
 
                 };
 
@@ -80,7 +83,10 @@ public class DbInitializer : IDbInitializer
                     NormalizedUserName = "JOE",
                     NormalizedEmail = "ADMIN@PTTMG.COM",
                     PhoneNumber = "2314124512",
-                    ImageUrl = "https://placehold.co/600x400"
+                    ImageUrl = "https://placehold.co/600x400",
+                    EmailConfirmed = true,
+                    CreatedDate = DateTime.Now,
+                    CreatedBy = "admin",
 
                 };
 

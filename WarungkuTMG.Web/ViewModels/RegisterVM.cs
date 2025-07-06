@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -31,4 +32,8 @@ public class RegisterVM
     public string? Role { get; set; }
     [ValidateNever]
     public IEnumerable<SelectListItem>? RoleList { get; set; }
+    [StringLength(250)]
+    public string? ImageUrl { get; set; }
+    [NotMapped]
+    public IFormFile? Image { get; set; }
 }
