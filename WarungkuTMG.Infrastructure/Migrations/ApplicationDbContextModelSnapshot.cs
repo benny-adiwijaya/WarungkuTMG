@@ -283,6 +283,64 @@ namespace WarungkuTMG.Infrastructure.Migrations
                     b.ToTable("UserRoles", (string)null);
                 });
 
+            modelBuilder.Entity("WarungkuTMG.Domain.Entities.Payment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal?>("CashReceived")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal?>("Change")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("DisabledBy")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<DateTime?>("DisabledDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("EvidenceNumber")
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("IsDisabled")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("PaymentType")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TransactionSaleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TransactionSaleId")
+                        .IsUnique();
+
+                    b.ToTable("Payments");
+                });
+
             modelBuilder.Entity("WarungkuTMG.Domain.Entities.Product", b =>
                 {
                     b.Property<int>("Id")
@@ -339,8 +397,10 @@ namespace WarungkuTMG.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
+                            CreatedBy = "admin",
+                            CreatedDate = new DateTime(2025, 7, 6, 17, 43, 58, 193, DateTimeKind.Local).AddTicks(8385),
                             Description = "Nasi goreng dengan ayam dan sayuran",
-                            ImageUrl = "https://placehold.co/600x400",
+                            ImageUrl = "/images/ProductImages/21fc1854-affb-466a-ad78-07a87a47c8df.jpeg",
                             IsDisabled = false,
                             Name = "Nasi Goreng",
                             Price = 15000m
@@ -348,11 +408,35 @@ namespace WarungkuTMG.Infrastructure.Migrations
                         new
                         {
                             Id = 2,
+                            CreatedBy = "admin",
+                            CreatedDate = new DateTime(2025, 7, 6, 17, 43, 58, 193, DateTimeKind.Local).AddTicks(8403),
                             Description = "Mie goreng dengan telur dan sayuran",
-                            ImageUrl = "https://placehold.co/600x400",
+                            ImageUrl = "/images/ProductImages/f52d4323-b225-46db-9b28-423b347264aa.jpeg",
                             IsDisabled = false,
                             Name = "Mie Goreng",
-                            Price = 12000m
+                            Price = 10000m
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedBy = "admin",
+                            CreatedDate = new DateTime(2025, 7, 6, 17, 43, 58, 193, DateTimeKind.Local).AddTicks(8405),
+                            Description = "Mie Ayam dengan ceker",
+                            ImageUrl = "/images/ProductImages/f0d826df-896a-4dfe-ab0a-77b8dbf2c98e.jpeg",
+                            IsDisabled = false,
+                            Name = "Mie Ayam",
+                            Price = 15000m
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedBy = "admin",
+                            CreatedDate = new DateTime(2025, 7, 6, 17, 43, 58, 193, DateTimeKind.Local).AddTicks(8407),
+                            Description = "Pisang ambon terbaik",
+                            ImageUrl = "/images/ProductImages/a7d7aac3-e107-4d99-872f-5fa953615873.jpeg",
+                            IsDisabled = false,
+                            Name = "Pisang Goreng",
+                            Price = 5000m
                         });
                 });
 
@@ -395,9 +479,6 @@ namespace WarungkuTMG.Infrastructure.Migrations
 
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<int>("PaymentType")
-                        .HasColumnType("int");
 
                     b.Property<decimal>("Total")
                         .HasColumnType("decimal(18,0)");
@@ -523,6 +604,17 @@ namespace WarungkuTMG.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("WarungkuTMG.Domain.Entities.Payment", b =>
+                {
+                    b.HasOne("WarungkuTMG.Domain.Entities.TransactionSale", "TransactionSale")
+                        .WithOne("Payment")
+                        .HasForeignKey("WarungkuTMG.Domain.Entities.Payment", "TransactionSaleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TransactionSale");
+                });
+
             modelBuilder.Entity("WarungkuTMG.Domain.Entities.TransactionSaleDetail", b =>
                 {
                     b.HasOne("WarungkuTMG.Domain.Entities.Product", "Product")
@@ -555,6 +647,8 @@ namespace WarungkuTMG.Infrastructure.Migrations
             modelBuilder.Entity("WarungkuTMG.Domain.Entities.TransactionSale", b =>
                 {
                     b.Navigation("Details");
+
+                    b.Navigation("Payment");
                 });
 #pragma warning restore 612, 618
         }

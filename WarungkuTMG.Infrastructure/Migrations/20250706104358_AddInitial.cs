@@ -91,7 +91,6 @@ namespace WarungkuTMG.Infrastructure.Migrations
                     DiscountPercentage = table.Column<decimal>(type: "decimal(18,0)", nullable: false),
                     VoucherAmount = table.Column<decimal>(type: "decimal(18,0)", nullable: false),
                     Total = table.Column<decimal>(type: "decimal(18,0)", nullable: false),
-                    PaymentType = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     ModifiedDate = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     CreatedBy = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
@@ -178,6 +177,42 @@ namespace WarungkuTMG.Infrastructure.Migrations
                         name: "FK_RoleClaims_Roles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "Roles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Payments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    TransactionSaleId = table.Column<int>(type: "int", nullable: false),
+                    PaymentType = table.Column<int>(type: "int", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    CashReceived = table.Column<decimal>(type: "decimal(65,30)", nullable: true),
+                    Change = table.Column<decimal>(type: "decimal(65,30)", nullable: true),
+                    EvidenceNumber = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CreatedDate = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    ModifiedDate = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    CreatedBy = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ModifiedBy = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    DisabledDate = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    IsDisabled = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    DisabledBy = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Payments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Payments_TransactionSales_TransactionSaleId",
+                        column: x => x.TransactionSaleId,
+                        principalTable: "TransactionSales",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -329,9 +364,17 @@ namespace WarungkuTMG.Infrastructure.Migrations
                 columns: new[] { "Id", "CreatedBy", "CreatedDate", "Description", "DisabledBy", "DisabledDate", "ImageUrl", "IsDisabled", "ModifiedBy", "ModifiedDate", "Name", "Price" },
                 values: new object[,]
                 {
-                    { 1, null, null, "Nasi goreng dengan ayam dan sayuran", null, null, "https://placehold.co/600x400", false, null, null, "Nasi Goreng", 15000m },
-                    { 2, null, null, "Mie goreng dengan telur dan sayuran", null, null, "https://placehold.co/600x400", false, null, null, "Mie Goreng", 12000m }
+                    { 1, "admin", new DateTime(2025, 7, 6, 17, 43, 58, 193, DateTimeKind.Local).AddTicks(8385), "Nasi goreng dengan ayam dan sayuran", null, null, "/images/ProductImages/21fc1854-affb-466a-ad78-07a87a47c8df.jpeg", false, null, null, "Nasi Goreng", 15000m },
+                    { 2, "admin", new DateTime(2025, 7, 6, 17, 43, 58, 193, DateTimeKind.Local).AddTicks(8403), "Mie goreng dengan telur dan sayuran", null, null, "/images/ProductImages/f52d4323-b225-46db-9b28-423b347264aa.jpeg", false, null, null, "Mie Goreng", 10000m },
+                    { 3, "admin", new DateTime(2025, 7, 6, 17, 43, 58, 193, DateTimeKind.Local).AddTicks(8405), "Mie Ayam dengan ceker", null, null, "/images/ProductImages/f0d826df-896a-4dfe-ab0a-77b8dbf2c98e.jpeg", false, null, null, "Mie Ayam", 15000m },
+                    { 4, "admin", new DateTime(2025, 7, 6, 17, 43, 58, 193, DateTimeKind.Local).AddTicks(8407), "Pisang ambon terbaik", null, null, "/images/ProductImages/a7d7aac3-e107-4d99-872f-5fa953615873.jpeg", false, null, null, "Pisang Goreng", 5000m }
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Payments_TransactionSaleId",
+                table: "Payments",
+                column: "TransactionSaleId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_RoleClaims_RoleId",
@@ -384,6 +427,9 @@ namespace WarungkuTMG.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Payments");
+
             migrationBuilder.DropTable(
                 name: "RoleClaims");
 

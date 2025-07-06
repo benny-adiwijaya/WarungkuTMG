@@ -35,10 +35,9 @@ namespace WarungkuTMG.Domain.Entities
         [Column(TypeName = "decimal(18,0)")]
         public decimal GrandTotal => Total - DiscountAmount - VoucherAmount;
 
-        [Required]
-        public PaymentType PaymentType { get; set; }
-
         [ValidateNever]
         public virtual List<TransactionSaleDetail>? Details { get; set; }
+        [ValidateNever]
+        public virtual Payment? Payment { get; set; }
     }
 }

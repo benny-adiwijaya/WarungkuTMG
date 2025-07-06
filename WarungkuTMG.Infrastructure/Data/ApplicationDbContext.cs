@@ -27,6 +27,7 @@ namespace WarungkuTMG.Infrastructure.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<TransactionSale> TransactionSales { get; set; }
         public DbSet<TransactionSaleDetail> TransactionSaleDetails { get; set; }
+        public DbSet<Payment> Payments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -39,7 +40,7 @@ namespace WarungkuTMG.Infrastructure.Data
                     Name = "Nasi Goreng",
                     Description = "Nasi goreng dengan ayam dan sayuran",
                     Price = 15000,
-                    ImageUrl = "https://placehold.co/600x400",
+                    ImageUrl = "/images/ProductImages/21fc1854-affb-466a-ad78-07a87a47c8df.jpeg",
                     CreatedBy = "admin",
                     CreatedDate = DateTime.Now
                 },
@@ -48,8 +49,28 @@ namespace WarungkuTMG.Infrastructure.Data
                     Id = 2,
                     Name = "Mie Goreng",
                     Description = "Mie goreng dengan telur dan sayuran",
-                    Price = 12000,
-                    ImageUrl = "https://placehold.co/600x400",
+                    Price = 10000,
+                    ImageUrl = "/images/ProductImages/f52d4323-b225-46db-9b28-423b347264aa.jpeg",
+                    CreatedBy = "admin",
+                    CreatedDate = DateTime.Now
+                },
+                new Product
+                {
+                    Id = 3,
+                    Name = "Mie Ayam",
+                    Description = "Mie Ayam dengan ceker",
+                    Price = 15000,
+                    ImageUrl = "/images/ProductImages/f0d826df-896a-4dfe-ab0a-77b8dbf2c98e.jpeg",
+                    CreatedBy = "admin",
+                    CreatedDate = DateTime.Now
+                },
+                new Product
+                {
+                    Id = 4,
+                    Name = "Pisang Goreng",
+                    Description = "Pisang ambon terbaik",
+                    Price = 5000,
+                    ImageUrl = "/images/ProductImages/a7d7aac3-e107-4d99-872f-5fa953615873.jpeg",
                     CreatedBy = "admin",
                     CreatedDate = DateTime.Now
                 }
