@@ -120,5 +120,16 @@ namespace WarungkuTMG.Web.Controllers
 
             return PartialView("_TransactionList",obj);
         }
+        
+        public IActionResult Detail(int transactionId)
+        {
+            
+            var transactions = _transactionService.GetTransactionSaleById(transactionId);
+            TransactionDetailVM transactionDetailVM = new TransactionDetailVM
+            {
+                 TransactionSale = transactions,
+            };
+            return View(transactionDetailVM);
+        }
     }
 }

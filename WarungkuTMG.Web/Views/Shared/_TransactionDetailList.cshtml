@@ -1,0 +1,32 @@
+@model TransactionSale
+
+<div id="TransactionDetailList"/>
+<table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+        <th>Image</th>
+        <th>Name</th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>Subtotal</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var obj in Model.Details)
+    {
+        <tr>
+            <td>
+                @if (!string.IsNullOrEmpty(obj.Product.ImageUrl))
+                {
+                    <img src="@Url.Content(obj.Product.ImageUrl)" alt="Product Image"
+                         width="100" style="border-radius:5px; border:1px solid #ccc;" />
+                }
+            </td>
+            <td>@obj.Product.Name</td>
+            <td>@obj.Quantity</td>
+            <td>@obj.Price</td>
+            <td>@obj.Subtotal</td>
+        </tr>
+    }
+    </tbody>
+</table>

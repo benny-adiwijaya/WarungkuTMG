@@ -20,3 +20,26 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.summary-box {
+  border-top: 2px solid #ccc;
+  padding-top: 20px;
+}
+.summary-box h4 {
+  font-weight: bold;
+}
+.discount, .voucher {
+  color: green;
+  font-weight: bold;
+}
+.grand-total {
+  color: maroon;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+.payment-btn {
+  width: 150px;
+}
+table input {
+  width: 100%;
+}

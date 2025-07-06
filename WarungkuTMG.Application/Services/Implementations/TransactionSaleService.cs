@@ -53,7 +53,8 @@ public class TransactionSaleService : ITransactionSaleService
 
         public TransactionSale GetTransactionSaleById(int id)
         {
-            return _unitOfWork.TransactionSale.Get(u => u.Id == id, includeProperties: "TransactionSaleDetails");
+            var result = _unitOfWork.TransactionSale.Get(u => u.Id == id, includeProperties: "Details.Product");
+            return result; 
         }
 
         public void UpdateTransactionSale(TransactionSale transactionSale)
