@@ -1,0 +1,77 @@
+@model ApplicationUser
+@{
+    ViewData["Title"] = "User";
+}
+<div class="w-100 card border-0 p-4">
+    <div class="card-header bg-primary bg-gradient ml-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="text-white py-2">Delete User</h2>
+            </div>
+        </div>
+    </div>
+    <div class="card-body border p-4">
+        <form method="post" class="row">
+            <input asp-for="Id" hidden />
+            <div class="col-10">
+            <div class="p-3">
+                @* <div asp-validation-summary="All"></div> *@
+                <div class="form-floating py-1 col-12">
+                    <input asp-for="UserName" disabled class="form-control border shadow" />
+                    <label asp-for="UserName" class="ms-2"></label>
+                </div>
+                <div class="form-floating py-1 col-12">
+                    <input asp-for="Email" disabled class="form-control border shadow" />
+                    <label asp-for="Email" class="ms-2"></label>
+                </div>
+                <div class="form-floating py-1 col-12">
+                    <input asp-for="Name" disabled class="form-control border shadow" />
+                    <label asp-for="Name" class="ms-2"></label>
+                </div>
+                <div class="form-floating py-1 col-12">
+                    <input asp-for="PhoneNumber" disabled class="form-control border shadow" />
+                    <label asp-for="PhoneNumber" class="ms-2"></label>
+                </div>
+                <div class="form-floating py-1 col-12">
+                    <input class="form-control border shadow" disabled value="@(Model?.UserRoles.FirstOrDefault().Role.Name)" />
+                    <label class="ms-2">Role</label>
+                </div>
+                <div class="form-floating py-1 col-12">
+                    <input asp-for="ImageUrl" disabled class="form-control border shadow" />
+                    <label asp-for="ImageUrl" class="ms-2"></label>
+                </div>
+                <div class="form-floating py-1 col-12">
+                    <input class="form-control border shadow" disabled value="@(Model?.CreatedBy + " - " + Model?.CreatedDate?.ToString("f"))" />
+                    <label class="ms-2">Created</label>
+                </div>
+                <div class="form-floating py-1 col-12">
+                    <input class="form-control border shadow" disabled value="@(Model?.ModifiedBy + " - " + Model?.ModifiedDate?.ToString("f"))" />
+                    <label class="ms-2">Last Modified</label>
+                </div>
+                <div class="row pt-2">
+                    <div class="col-6 col-md-3">
+                        <button type="submit" class="btn btn-danger w-100">
+                            <i class="bi bi-trash-fill"></i> Delete
+                        </button>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <a asp-controller="ApplicationUser" asp-action="Index" class="btn btn-secondary w-100">
+                            <i class="bi bi-x-circle"></i> Cancel
+                        </a>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div class="col-2">
+                <img src="@Model.ImageUrl" width="100%"
+                     style="border-radius:5px; border:1px solid #bbb9b9" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

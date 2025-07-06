@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WarungkuTMG.Domain\WarungkuTMG.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Common\Utility\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Common\Utility\" />
+  </ItemGroup>
+</Project>

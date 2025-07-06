@@ -1,0 +1,67 @@
+@model TransactionSale
+@{
+    var showActions = ViewData["ShowActions"] as bool? ?? false;
+}
+
+<div id="TransactionDetailList">
+    <table class="table table-bordered table-striped" id="detailsTable">
+        <thead>
+        <tr>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Subtotal</th>
+            @if (showActions)
+            {
+                <th>Action</th>
+            }
+
+        </tr>
+        </thead>
+        <tbody>
+        @if (Model?.Details != null)
+        {
+            @for (var i = 0; i < Model.Details.Count; i++)
+            {
+                var detail = Model.Details[i];
+                <tr>
+                    <td>
+                        @if (!string.IsNullOrEmpty(detail.Product.ImageUrl))
+                        {
+                            <img src="@Url.Content(detail.Product.ImageUrl)" alt="Product Image"
+                                 width="100" style="border-radius:5px; border:1px solid #ccc;" />
+                        }
+                        <input type="hidden" name="TransactionSale.Details[@i].ProductId" value="@detail.ProductId" />
+                        <input type="hidden" name="TransactionSale.Details[@i].Product.Id" value="@detail.Product.Id" />
+                        <input type="hidden" name="TransactionSale.Details[@i].Product.ImageUrl" value="@detail.Product.ImageUrl" />
+                    </td>
+                    <td>
+                        @detail.Product.Name
+                        <input type="hidden" name="TransactionSale.Details[@i].Product.Name" value="@detail.Product.Name" />
+                    </td>
+                    <td>
+                        @detail.Quantity
+                        <input type="hidden" name="TransactionSale.Details[@i].Quantity" value="@detail.Quantity" />
+                    </td>
+                    <td>
+                        @detail.Price
+                        <input type="hidden" name="TransactionSale.Details[@i].Price" value="@detail.Price" />
+                    </td>
+                    <td>
+                        @detail.Subtotal
+                        <input type="hidden" name="TransactionSale.Details[@i].Subtotal" value="@detail.Subtotal" />
+                    </td>
+                    @if (showActions)
+                    {
+                        <td>
+                            <button type="button" class="btn btn-danger btn-sm" onclick="removeDetail(this)">Remove</button>
+                        </td>
+                    }
+
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+</div>

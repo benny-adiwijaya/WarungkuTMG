@@ -1,0 +1,40 @@
+@model ListTransactionVM
+
+<div id="TransactionsList"/>
+<table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+        <th>Date</th>
+        <th>User</th>
+        <th>Customer</th>
+        <th>Total</th>
+        <th>Discount</th>
+        <th>Voucher</th>
+        <th>Grand Total</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var obj in Model.ListTransactionSale)
+    {
+        <tr>
+            <td>@obj.CreatedDate?.ToString("f")</td>
+            <td>@obj.UserLogin</td>
+            <td>@obj.CustomerName</td>
+            <td>@Convert.ToInt32(obj.Total)</td>
+            <td>@obj.DiscountPercentage%</td>
+            <td>@Convert.ToInt32(obj.VoucherAmount)</td>
+            <td>@Convert.ToInt32(obj.GrandTotal)</td>
+
+            <td>
+                <div class="w-75 btn-group" role="group">
+                    <a asp-controller="TransactionSale" asp-action="Detail" asp-route-transactionId="@obj.Id"
+                       class="btn btn-info mx-2">
+                        <i class="bi bi-eye"></i> View
+                    </a>
+                </div>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

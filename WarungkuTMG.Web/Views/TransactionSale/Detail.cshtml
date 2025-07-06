@@ -1,0 +1,68 @@
+@model TransactionDetailVM
+@{
+    ViewData["Title"] = "Transaction";
+}
+<div class="w-100 card border-0 p-4">
+    <div class="card-header bg-danger bg-gradient ml-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="text-white py-2">Transaction Detail @Model.TransactionSale.Id </h2>
+            </div>
+        </div>
+    </div>
+    <div class="card-body border p-4">
+        <div class="container">
+            <!-- User Input -->
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">User Login</label>
+                    <input type="text" class="form-control" value="@Model.TransactionSale.UserLogin" disabled/>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Customer Name</label>
+                    <input type="text" class="form-control" value="@Model.TransactionSale.CustomerName" disabled/>
+                </div>
+    
+                <div class="col-md-6">
+                    <label class="form-label">Discount (%)</label>
+                    <input type="number" class="form-control" value="@Model.TransactionSale.DiscountPercentage" disabled/>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Voucher (Rp)</label>
+                    <input type="number" class="form-control" value="@Model.TransactionSale.VoucherAmount" disabled/>
+                </div>
+            </div>
+    
+            <!-- Summary -->
+            <div class="row text-center summary-box mt-4">
+                <div class="col-md-3">
+                    <h4>Total</h4>
+                    <p>@Convert.ToInt32(Model.TransactionSale.Total)</p>
+                </div>
+                <div class="col-md-3">
+                    <h4>Discount</h4>
+                    <p class="discount">-@Convert.ToInt32(Model.TransactionSale.DiscountAmount)</p>
+                </div>
+                <div class="col-md-3">
+                    <h4>Voucher</h4>
+                    <p class="voucher">-@Convert.ToInt32(Model.TransactionSale.VoucherAmount)</p>
+                </div>
+                <div class="col-md-3">
+                    <h4>Grand Total</h4>
+                    <p class="grand-total">@Convert.ToInt32(Model.TransactionSale.GrandTotal)</p>
+                </div>
+            </div>
+            
+            <div class="row g-3 justify-content-end mb-2">
+                <div class="col-md-6 d-flex justify-content-end align-items-center">
+                    <label class="form-label me-2 mb-0">Payment</label>
+                    <select class="form-select w-auto" disabled>
+                        <option selected>Cash</option>
+                    </select>
+                </div>
+            </div>
+            <partial name="_TransactionDetailList" model="Model.TransactionSale"/>
+        </div>
+        
+    </div>
+</div>
