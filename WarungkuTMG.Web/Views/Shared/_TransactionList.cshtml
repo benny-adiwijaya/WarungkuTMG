@@ -1,0 +1,28 @@
+@model ListTransactionVM
+
+<div id="TransactionsList"/>
+<table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+        <th>Date</th>
+        <th>User</th>
+        <th>Total</th>
+        <th>Discount</th>
+        <th>Voucher</th>
+        <th>Grand Total</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var obj in Model.ListTransactionSale)
+    {
+        <tr>
+            <td>@obj.CreatedDate?.ToString("f")</td>
+            <td>@obj.UserLogin</td>
+            <td>@obj.Total</td>
+            <td>@obj.DiscountPercentage%</td>
+            <td>@obj.VoucherAmount</td>
+            <td>@obj.GrandTotal</td>
+        </tr>
+    }
+    </tbody>
+</table>

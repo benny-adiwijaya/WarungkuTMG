@@ -1,0 +1,66 @@
+@model ListTransactionVM
+@{
+    ViewData["Title"] = "Transaction";
+}
+<div class="w-100 card border-0 p-4">
+    <div class="card-header bg-danger bg-gradient ml-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="text-white py-2">Transaction List</h2>
+            </div>
+        </div>
+    </div>
+    <div class="card-body border p-4">
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label asp-for="Date" class="form-label">Date</label>
+                        <input asp-for="Date" type="date" class="form-control d-inline-block w-auto"/>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="button" onclick="fnLoadTransactionList()" class="btn btn-success btn-block">
+                            <i class="bi bi-search"></i> &nbsp;Find
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 text-end">
+                <a asp-controller="TransactionSale" asp-action="Create" class="btn btn-warning">
+                    <i class="bi bi-plus-circle"></i> Add New Transaction
+                </a>
+            </div>
+        </div>
+        <partial name="_TransactionList" model="Model"/>
+        
+    </div>
+</div>
+@section scripts{
+    <script>
+        function fnLoadTransactionList() {
+            $('.spinner').show();
+            var objData = {
+                Date: $("#Date").val(),
+            };
+
+        $.ajax({
+                type: "POST",
+                data:objData,
+                url: "@Url.Action("GetTransactionsByDate","TransactionSale")",
+                success: function (data) {
+                    $("#TransactionsList").empty();
+                    $("#TransactionsList").html(data);
+                    $('.spinner').hide();
+                },
+                failure: function (response) {
+                    $('.spinner').hide();
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    $('.spinner').hide();
+                    alert(response.responseText);
+                }
+            });
+        }
+        </script>
+}

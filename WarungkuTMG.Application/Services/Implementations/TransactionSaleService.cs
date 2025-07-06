@@ -41,7 +41,14 @@ public class TransactionSaleService : ITransactionSaleService
 
         public IEnumerable<TransactionSale> GetAllTransactionSales()
         {
-            return _unitOfWork.TransactionSale.GetAll(includeProperties: "TransactionSaleDetails");
+            var result = _unitOfWork.TransactionSale.GetAll();
+            return result;  
+        }
+
+        public IEnumerable<TransactionSale> GetTransactionsByDate(DateTime date)
+        {
+            var result = _unitOfWork.TransactionSale.GetAll(q => q.CreatedDate.Value.Date == date);
+            return result;  
         }
 
         public TransactionSale GetTransactionSaleById(int id)
