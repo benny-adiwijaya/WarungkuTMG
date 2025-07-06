@@ -1,32 +1,52 @@
 @model TransactionSale
 
-<div id="TransactionDetailList"/>
-<table class="table table-bordered table-striped">
-    <thead>
-    <tr>
-        <th>Image</th>
-        <th>Name</th>
-        <th>Quantity</th>
-        <th>Price</th>
-        <th>Subtotal</th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var obj in Model.Details)
-    {
+<div id="TransactionDetailList">
+    <table class="table table-bordered table-striped" id="detailsTable">
+        <thead>
         <tr>
-            <td>
-                @if (!string.IsNullOrEmpty(obj.Product.ImageUrl))
-                {
-                    <img src="@Url.Content(obj.Product.ImageUrl)" alt="Product Image"
-                         width="100" style="border-radius:5px; border:1px solid #ccc;" />
-                }
-            </td>
-            <td>@obj.Product.Name</td>
-            <td>@obj.Quantity</td>
-            <td>@obj.Price</td>
-            <td>@obj.Subtotal</td>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Subtotal</th>
         </tr>
-    }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+        @if (Model?.Details != null)
+        {
+            @for (var i = 0; i < Model.Details.Count; i++)
+            {
+                var detail = Model.Details[i];
+                <tr>
+                    <td>
+                        @if (!string.IsNullOrEmpty(detail.Product.ImageUrl))
+                        {
+                            <img src="@Url.Content(detail.Product.ImageUrl)" alt="Product Image"
+                                 width="100" style="border-radius:5px; border:1px solid #ccc;" />
+                        }
+                        <input type="hidden" name="TransactionSale.Details[@i].ProductId" value="@detail.ProductId" />
+                        <input type="hidden" name="TransactionSale.Details[@i].Product.Id" value="@detail.Product.Id" />
+                        <input type="hidden" name="TransactionSale.Details[@i].Product.ImageUrl" value="@detail.Product.ImageUrl" />
+                    </td>
+                    <td>
+                        @detail.Product.Name
+                        <input type="hidden" name="TransactionSale.Details[@i].Product.Name" value="@detail.Product.Name" />
+                    </td>
+                    <td>
+                        @detail.Quantity
+                        <input type="hidden" name="TransactionSale.Details[@i].Quantity" value="@detail.Quantity" />
+                    </td>
+                    <td>
+                        @detail.Price
+                        <input type="hidden" name="TransactionSale.Details[@i].Price" value="@detail.Price" />
+                    </td>
+                    <td>
+                        @detail.Subtotal
+                        <input type="hidden" name="TransactionSale.Details[@i].Subtotal" value="@detail.Subtotal" />
+                    </td>
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,304 @@
+@using WarungkuTMG.Domain.Enums
+@model TransactionCreateVM
+@{
+    ViewData["Title"] = "Transaction";
+}
+<div class="w-100 card border-0 p-4">
+    <div class="card-header bg-danger bg-gradient ml-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="text-white py-2">Transaction Create</h2>
+            </div>
+        </div>
+    </div>
+    <form id="transactionForm" method="post" asp-action="Create" asp-controller="TransactionSale">
+        <input type="hidden" asp-for="TransactionSale.UserLogin" />
+        <input type="hidden" asp-for="Payment.PaymentType" id="PaymentType" />
+        <input type="hidden" asp-for="Payment.Amount" id="PaymentAmount" />
+        <input type="hidden" asp-for="Payment.EvidenceNumber" id="PaymentEvidenceNumber" />
+
+
+        <div class="card-body border p-4">
+            <div class="container">
+                <!-- User Input -->
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">User Login</label>
+                        <input type="text" class="form-control" asp-for="TransactionSale.UserLogin" disabled/>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Customer Name</label>
+                        <input type="text" class="form-control" asp-for="TransactionSale.CustomerName"/>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Discount (%)</label>
+                        <input type="number" class="form-control" id="discountInput" asp-for="TransactionSale.DiscountAmount"/>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Voucher (Rp)</label>
+                        <input type="number" class="form-control" id="voucherInput" asp-for="TransactionSale.VoucherAmount"/>
+                    </div>
+
+                </div>
+
+                <!-- Summary -->
+                <div class="row text-center summary-box mt-4">
+                    <div class="col-md-3">
+                        <h4>Total</h4>
+                        <p id="totalDisplay">@Model.TransactionSale.Total</p>
+                    </div>
+                    <div class="col-md-3">
+                        <h4>Discount</h4>
+                        <p class="discount" id="discountDisplay">@Model.TransactionSale.DiscountAmount</p>
+                    </div>
+                    <div class="col-md-3">
+                        <h4>Voucher</h4>
+                        <p class="voucher" id="voucherDisplay">-@Model.TransactionSale.VoucherAmount</p>
+                    </div>
+                    <div class="col-md-3">
+                        <h4>Grand Total</h4>
+                        <p class="grand-total" id="grandTotalDisplay">@Model.TransactionSale.GrandTotal</p>
+                    </div>
+                </div>
+
+                <div class="row g-3 justify-content-end mt-2 mb-2">
+                    <div class="col-md-6 d-flex align-items-center">
+                        <label class="form-label me-3 mb-0">Payment</label>
+
+                        <div class="d-flex flex-grow-1 gap-2">
+                            <!-- Cash Button -->
+                            <button type="button" class="btn btn-primary w-100"
+                                    onclick="setPaymentType('Cash'); $('#cashModal').modal('show');">
+                                Cash
+                            </button>
+
+                            <!-- Non Cash Button -->
+                            <button type="button" class="btn btn-primary w-100"
+                                    onclick="setPaymentType('NonCash'); $('#nonCashModal').modal('show');">
+                                Non Cash
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <partial name="_TransactionDetailList" model="Model.TransactionSale"/>
+            </div>
+        </div>
+    </form>
+
+    
+</div>
+
+<div class="modal fade" id="cashModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <div class="row align-items-center my-2">
+                    <div class="col-4 text-end">
+                        <label class="mb-0">Grand Total</label>
+                    </div>
+                    <div class="col-8">
+                        <input type="number" asp-for="TransactionSale.GrandTotal" disabled class="form-control text-end" />
+                    </div>
+                </div>
+
+                <div class="row align-items-center my-2">
+                    <div class="col-4 text-end">
+                        <label class="mb-0">Cash</label>
+                    </div>
+                    <div class="col-8">
+                        <input type="number" id="CashInput" class="form-control text-end" />
+                    </div>
+                </div>
+
+                <div class="row align-items-center my-2">
+                    <div class="col-4 text-end">
+                        <label class="mb-0">Change</label>
+                    </div>
+                    <div class="col-8 text-start">
+                        <h4 id="ChangeOutput" class="mb-0 text-end">0</h4>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end mt-4 gap-2">
+                    <button type="button" class="btn btn-primary w-100" onclick="submitPayment()">Ok</button>
+                    <button type="button" class="btn btn-secondary w-100" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="nonCashModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <div class="row align-items-center my-2">
+                    <div class="col-4 text-end">
+                        <label class="mb-0">Grand Total</label>
+                    </div>
+                    <div class="col-8">
+                        <input type="number" asp-for="TransactionSale.GrandTotal" disabled class="form-control text-end" />
+                    </div>
+                </div>
+
+                <div class="row align-items-center my-3">
+                    <div class="col-4 text-end">
+                        <label class="mb-0">Evidence No</label>
+                    </div>
+                    <div class="col-8">
+                        <input type="text" id="EvidenceInput" class="form-control text-start" />
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end mt-4 gap-2">
+                    <button type="button" class="btn btn-primary w-100" onclick="submitPayment()">Ok</button>
+                    <button type="button" class="btn btn-secondary w-100" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts {
+    <script>
+        // Add this to your existing scripts section
+        document.addEventListener('DOMContentLoaded', function() {
+            const discountInput = document.getElementById('discountInput');
+            const voucherInput = document.getElementById('voucherInput');
+            const totalDisplay = document.getElementById('totalDisplay');
+            const discountDisplay = document.getElementById('discountDisplay');
+            const voucherDisplay = document.getElementById('voucherDisplay');
+            const grandTotalDisplay = document.getElementById('grandTotalDisplay');
+
+            function updateSummary() {
+                const total = parseFloat(totalDisplay.textContent) || 0;
+                const discountPercent = parseFloat(discountInput.value) || 0;
+                const voucherAmount = parseFloat(voucherInput.value) || 0;
+
+                const discountAmount = (total * discountPercent / 100);
+                const grandTotal = total - discountAmount - voucherAmount;
+
+                discountDisplay.textContent = discountAmount.toFixed(2);
+                voucherDisplay.textContent = `-${voucherAmount.toFixed(2)}`;
+                grandTotalDisplay.textContent = grandTotal.toFixed(2);
+
+                // Update the grand total in the payment modals
+                const grandTotalInputs = document.querySelectorAll('input[name="TransactionSale.GrandTotal"]');
+                grandTotalInputs.forEach(input => {
+                    input.value = grandTotal;
+                });
+            }
+
+            discountInput.addEventListener('input', updateSummary);
+            voucherInput.addEventListener('input', updateSummary);
+        });
+
+        function setPaymentType(value) {
+        document.getElementById('PaymentType').value = value;
+
+        // Highlight the selected button
+        document.querySelectorAll('.btn-outline-primary').forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+    }
+        document.getElementById('CashInput')?.addEventListener('input', function () {
+            const cash = parseFloat(this.value) || 0;
+            const grandTotal = parseFloat(document.getElementById('grandTotalDisplay').textContent) || 0;
+            const change = cash - grandTotal;
+            document.getElementById('ChangeOutput').innerText = change > 0 ? change.toLocaleString() : '0';
+        });
+
+
+        function setPaymentType(type) {
+            document.getElementById('PaymentType').value = type;
+        }
+
+        function submitPayment() {
+            const form = document.getElementById('transactionForm');
+            const paymentType = document.getElementById('PaymentType').value;
+
+
+            // Get all the necessary values
+            const total = parseFloat(document.getElementById('totalDisplay').textContent) || 0;
+            const discountPercent = parseFloat(document.getElementById('discountInput').value) || 0;
+            const discountAmount = parseFloat(document.getElementById('discountDisplay').textContent) || 0;
+            const voucherAmount = parseFloat(document.getElementById('voucherInput').value) || 0;
+            const grandTotal = parseFloat(document.getElementById('grandTotalDisplay').textContent) || 0;
+
+            // Set Payment properties
+            createOrUpdateHiddenInput(form, 'Payment.Amount', grandTotal);
+            createOrUpdateHiddenInput(form, 'Payment.PaymentType', paymentType);
+
+
+            // Create hidden inputs for transaction data if they don't exist
+            createOrUpdateHiddenInput(form, 'TransactionSale.Total', total);
+            createOrUpdateHiddenInput(form, 'TransactionSale.DiscountPercentage', discountPercent);
+            createOrUpdateHiddenInput(form, 'TransactionSale.DiscountAmount', discountAmount);
+            createOrUpdateHiddenInput(form, 'TransactionSale.VoucherAmount', voucherAmount);
+            createOrUpdateHiddenInput(form, 'TransactionSale.GrandTotal', grandTotal);
+
+            // Check for details
+            const detailsRows = document.querySelectorAll('#detailsTable tbody tr');
+            if (!detailsRows || detailsRows.length === 0) {
+                alert('No transaction details found. Please add at least one item.');
+                return;
+            }
+
+
+
+            if (!paymentType) {
+                alert('Please select a payment type');
+                return;
+            }
+
+            if (paymentType === 'Cash') {
+                const cashAmount = parseFloat(document.getElementById('CashInput').value);
+                const grandTotal = parseFloat(document.querySelector('input[name="TransactionSale.GrandTotal"]').value);
+
+                if (!cashAmount) {
+                    alert('Please enter cash amount');
+                    return;
+                }
+
+                if (cashAmount < grandTotal) {
+                    alert('Cash amount must be greater than or equal to grand total');
+                    return;
+                }
+                createOrUpdateHiddenInput(form, 'Payment.CashAmount', cashAmount);
+                createOrUpdateHiddenInput(form, 'Payment.Change', cashAmount - grandTotal);
+
+            } else if (paymentType === 'NonCash') {
+                const evidenceNo = document.getElementById('EvidenceInput').value;
+                if (!evidenceNo) {
+                    alert('Please enter evidence number');
+                    return;
+                }
+                createOrUpdateHiddenInput(form, 'Payment.EvidenceNumber', evidenceNo);
+
+            }
+
+            // Close the modal
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                const modalInstance = bootstrap.Modal.getInstance(modal);
+                if (modalInstance) {
+                    modalInstance.hide();
+                }
+            });
+
+            // Submit the form
+            form.submit();
+        }
+
+        function createOrUpdateHiddenInput(form, name, value) {
+            let input = form.querySelector(`input[name="${name}"]`);
+            if (!input) {
+                input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = name;
+                form.appendChild(input);
+            }
+            input.value = value;
+        }
+
+
+    </script>
+}

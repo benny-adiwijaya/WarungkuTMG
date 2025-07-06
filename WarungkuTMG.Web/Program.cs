@@ -43,6 +43,7 @@ namespace WarungkuTMG.Web
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IDbInitializer, DbInitializer>();
             builder.Services.AddScoped<IProductService, ProductService>();
+            builder.Services.AddScoped<IPaymentService, PaymentService>();
             builder.Services.AddScoped<ITransactionSaleService, TransactionSaleService>();
             builder.Services.AddScoped<ITransactionSaleDetailService, TransactionSaleDetailService>();
             builder.Services.AddScoped<IApplicationUserService, ApplicationUserService>();

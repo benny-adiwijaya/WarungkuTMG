@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using WarungkuTMG.Application.Common.Interfaces;
 using WarungkuTMG.Application.Services.Interfaces;
 using WarungkuTMG.Domain.Entities;
+using WarungkuTMG.Domain.Enums;
 using WarungkuTMG.Infrastructure.Data;
 using WarungkuTMG.Web.ViewModels;
 
@@ -12,10 +13,22 @@ namespace WarungkuTMG.Web.Controllers
     public class TransactionSaleController : Controller
     {
         private readonly ITransactionSaleService _transactionService;
+        private readonly ITransactionSaleDetailService _transactionDetailService;
+        private readonly IApplicationUserService _applicationUserService;
+        private readonly IProductService _productService;
+        private readonly IPaymentService _paymentService;
 
-        public TransactionSaleController(ITransactionSaleService transactionService)
+        public TransactionSaleController(ITransactionSaleService transactionService, 
+            IApplicationUserService applicationUserService,
+            IProductService productService,
+            ITransactionSaleDetailService transactionDetailService,
+            IPaymentService paymentService)
         {
             _transactionService = transactionService;
+            _applicationUserService = applicationUserService;
+            _productService = productService;
+            _transactionDetailService = transactionDetailService;
+            _paymentService = paymentService;
         }
 
         public IActionResult Index()
@@ -31,21 +44,81 @@ namespace WarungkuTMG.Web.Controllers
 
         public IActionResult Create()
         {
-            return View();
+            string fullName = "";
+            var userName = User.Identity?.Name ?? "Anonymous";
+            var user = _applicationUserService.FindByUserName(userName);
+            if (user != null)
+            {
+                fullName = user.Name; // assuming you have this property
+            }
+            var products = _productService.GetProductById(1);
+            var dummyDetail = new TransactionSaleDetail
+            {
+                ProductId = products.Id,
+                Product = products,
+                Quantity = 1,
+                Price = products.Price,
+            };
+            TransactionCreateVM obj = new()
+            {
+                TransactionSale = new TransactionSale
+                {
+                    UserLogin = fullName,
+                    CustomerName = null,
+                    Details = new List<TransactionSaleDetail>(),
+                },
+                Payment = new Payment()
+            };
+            
+            obj.TransactionSale.Details.Add(dummyDetail);
+            obj.TransactionSale.Total = obj.TransactionSale.Details.Sum(x => x.Price * x.Quantity);
+            
+            return View(obj);
         }
 
         [HttpPost]
-        public IActionResult Create(TransactionSale obj)
+        public IActionResult Create(TransactionCreateVM model, string? CashAmount, string? EvidenceNumber)
         {
-            if (ModelState.IsValid)
-            {
+            ModelState.Remove("Payment.TransactionSale");
 
-                _transactionService.CreateTransactionSale(obj);
-                TempData["success"] = "The transaction has been created successfully.";
-                return RedirectToAction(nameof(Index));
+            if (!ModelState.IsValid)
+            {
+                return View(model);
             }
-            return View();
+
+            try
+            {
+                var details = model.TransactionSale.Details;
+                model.TransactionSale.Details = null;
+                // Call your service to create the transaction
+                _transactionService.CreateTransactionSale(model.TransactionSale);
+                if (details != null)
+                {
+                    foreach (var detail in details)
+                    {
+                        detail.TransactionSaleId = model.TransactionSale.Id;
+                        detail.Product = null;
+                        _transactionDetailService.CreateTransactionSaleDetail(detail);
+                    }
+                }
+
+                model.Payment.TransactionSaleId = model.TransactionSale.Id;
+                _paymentService.CreatePayment(model.Payment);
+
+
+                // Redirect to success page or transaction list
+                TempData["success"] = "The transaction has been deleted successfully.";
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                // Handle error
+                ModelState.AddModelError("", "Error creating transaction: " + ex.Message);
+                TempData["error"] = "Failed to create the transaction. Please try again later. .";
+                return View(model);
+            }
         }
+
 
         public IActionResult Update(int transactionId)
         {

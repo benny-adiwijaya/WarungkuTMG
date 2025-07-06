@@ -41,7 +41,7 @@ public class TransactionSaleService : ITransactionSaleService
 
         public IEnumerable<TransactionSale> GetAllTransactionSales()
         {
-            var result = _unitOfWork.TransactionSale.GetAll();
+            var result = _unitOfWork.TransactionSale.GetAll().OrderByDescending(q => q.CreatedDate);
             return result;  
         }
 

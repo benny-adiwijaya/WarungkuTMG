@@ -12,6 +12,7 @@ namespace WarungkuTMG.Application.Common.Interfaces
         ITransactionSaleRepository TransactionSale { get; }
         ITransactionSaleDetailRepository TransactionSaleDetail { get; }
         IApplicationUserRepository ApplicationUser { get; }
+        IPaymentRepository Payment { get; }
         void Save();
     }
 }

@@ -20,6 +20,7 @@ namespace WarungkuTMG.Infrastructure.Repositories
         public ITransactionSaleRepository TransactionSale { get; private set; }
         public ITransactionSaleDetailRepository TransactionSaleDetail { get; private set; }
         public IApplicationUserRepository ApplicationUser { get; private set; }
+        public IPaymentRepository Payment { get; private set; }
 
         public UnitOfWork(ApplicationDbContext db, 
             UserManager<ApplicationUser> userManager, 
@@ -31,6 +32,7 @@ namespace WarungkuTMG.Infrastructure.Repositories
             _roleManager = roleManager;
             _signInManager = signInManager;
             Product = new ProductRepository(_db);
+            Payment = new PaymentRepository(_db);
             TransactionSale = new TransactionSaleRepository(_db);
             TransactionSaleDetail = new TransactionSaleDetailRepository(_db);
             ApplicationUser = new ApplicationUserRepository(_userManager, _roleManager, _signInManager);
