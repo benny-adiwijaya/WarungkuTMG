@@ -32,13 +32,6 @@
                 <a class="nav-link" href="#">Hi @UserManager.GetUserName(User)!</a>
             </div>
         </li>
-
-        @if (isAdmin)
-        {
-            <li class="nav-item">
-                <a class="nav-link" asp-controller="Account" asp-action="Register">Register</a>
-            </li>
-        }
         <li class="nav-item">
             <a class="nav-link" asp-controller="Account" asp-action="Logout">Logout</a>
         </li>

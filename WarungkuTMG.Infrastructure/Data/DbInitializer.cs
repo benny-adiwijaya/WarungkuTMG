@@ -55,7 +55,7 @@ public class DbInitializer : IDbInitializer
                 {
                     UserName = "admin",
                     Email = "admin@pttmg.com",
-                    Name = "Smith Wong",
+                    Name = "Adam Jasmin",
                     NormalizedUserName = "ADMIN",
                     NormalizedEmail = "ADMIN@PTTMG.COM",
                     PhoneNumber = "082308237878",
@@ -79,11 +79,11 @@ public class DbInitializer : IDbInitializer
                 {
                     UserName = "joe",
                     Email = "joe@pttmg.com",
-                    Name = "Joe Carlos",
+                    Name = "Joe Fandy",
                     NormalizedUserName = "JOE",
                     NormalizedEmail = "ADMIN@PTTMG.COM",
                     PhoneNumber = "082308233344",
-                    ImageUrl = "/images/UserImages/98ffec51-6105-4191-893f-df91f9ec0310.jpg",
+                    ImageUrl = "/images/UserImages/086ff335-1e72-45c3-a10b-e450213c6aee.jpg",
                     EmailConfirmed = true,
                     CreatedDate = DateTime.Now,
                     CreatedBy = "admin",

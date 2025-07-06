@@ -19,23 +19,23 @@ namespace WarungkuTMG.Web
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
-            //builder.Services.AddDbContext<ApplicationDbContext>(options =>
-            //    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                    options.UseMySql(
-                            connectionString,
-                            new MySqlServerVersion(new Version(8, 0, 20)), // specify server version
-                            mySqlOptions =>
-                            {
-                                mySqlOptions.CommandTimeout((int)TimeSpan.FromMinutes(5).TotalSeconds); // set command timeout to (5 minutes)
-                                // Optionally configure other MySQL options here
-                                // e.g., mySqlOptions.CharSetBehavior(CharSetBehavior.NeverAppend);
-                            }
-                        )
-                        .EnableSensitiveDataLogging() // enable sensitive data logging
-                        .EnableDetailedErrors() // enable detailed error messages
-            );
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            //var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            //builder.Services.AddDbContext<ApplicationDbContext>(options =>
+            //        options.UseMySql(
+            //                connectionString,
+            //                new MySqlServerVersion(new Version(8, 0, 20)), // specify server version
+            //                mySqlOptions =>
+            //                {
+            //                    mySqlOptions.CommandTimeout((int)TimeSpan.FromMinutes(5).TotalSeconds); // set command timeout to (5 minutes)
+            //                    // Optionally configure other MySQL options here
+            //                    // e.g., mySqlOptions.CharSetBehavior(CharSetBehavior.NeverAppend);
+            //                }
+            //            )
+            //            .EnableSensitiveDataLogging() // enable sensitive data logging
+            //            .EnableDetailedErrors() // enable detailed error messages
+            //);
             
             builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
