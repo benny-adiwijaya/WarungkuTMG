@@ -13,9 +13,26 @@
         {
             isAdmin = await UserManager.IsInRoleAsync(currentUser, "Administrator");
         }
-        <li class="nav-item">
-            <a class="nav-link" href="#">Hi @UserManager.GetUserName(User)!</a>
+        <li class="nav-item d-flex align-items-center">
+            <div class="d-flex align-items-center gap-2">
+                @if (!string.IsNullOrEmpty(currentUser?.ImageUrl))
+                {
+                    <img src="@currentUser.ImageUrl" 
+                         alt="Profile" 
+                         class="rounded-circle" 
+                         style="width: 32px; height: 32px; object-fit: cover; border: 1px solid #dee2e6;" />
+                }
+                else
+                {
+                    <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center text-white"
+                         style="width: 32px; height: 32px;">
+                        <i class="bi bi-person-fill"></i>
+                    </div>
+                }
+                <a class="nav-link" href="#">Hi @UserManager.GetUserName(User)!</a>
+            </div>
         </li>
+
         @if (isAdmin)
         {
             <li class="nav-item">

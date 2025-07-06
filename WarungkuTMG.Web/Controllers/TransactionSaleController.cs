@@ -77,7 +77,7 @@ namespace WarungkuTMG.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(TransactionCreateVM model, string? CashAmount, string? EvidenceNumber)
+        public IActionResult Create(TransactionCreateVM model)
         {
             ModelState.Remove("Payment.TransactionSale");
 

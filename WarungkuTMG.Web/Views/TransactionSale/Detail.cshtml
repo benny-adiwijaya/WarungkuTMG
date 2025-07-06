@@ -37,19 +37,19 @@
             <div class="row text-center summary-box mt-4">
                 <div class="col-md-3">
                     <h4>Total</h4>
-                    <p>@Model.TransactionSale.Total</p>
+                    <p>@Convert.ToInt32(Model.TransactionSale.Total)</p>
                 </div>
                 <div class="col-md-3">
                     <h4>Discount</h4>
-                    <p class="discount">@Model.TransactionSale.DiscountAmount</p>
+                    <p class="discount">-@Convert.ToInt32(Model.TransactionSale.DiscountAmount)</p>
                 </div>
                 <div class="col-md-3">
                     <h4>Voucher</h4>
-                    <p class="voucher">-@Model.TransactionSale.VoucherAmount</p>
+                    <p class="voucher">-@Convert.ToInt32(Model.TransactionSale.VoucherAmount)</p>
                 </div>
                 <div class="col-md-3">
                     <h4>Grand Total</h4>
-                    <p class="grand-total">@Model.TransactionSale.GrandTotal</p>
+                    <p class="grand-total">@Convert.ToInt32(Model.TransactionSale.GrandTotal)</p>
                 </div>
             </div>
             
