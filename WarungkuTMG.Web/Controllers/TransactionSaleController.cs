@@ -51,14 +51,14 @@ namespace WarungkuTMG.Web.Controllers
             {
                 fullName = user.Name; // assuming you have this property
             }
-            var products = _productService.GetProductById(1);
-            var dummyDetail = new TransactionSaleDetail
-            {
-                ProductId = products.Id,
-                Product = products,
-                Quantity = 1,
-                Price = products.Price,
-            };
+            // var products = _productService.GetProductById(1);
+            // var dummyDetail = new TransactionSaleDetail
+            // {
+            //     ProductId = products.Id,
+            //     Product = products,
+            //     Quantity = 1,
+            //     Price = products.Price,
+            // };
             TransactionCreateVM obj = new()
             {
                 TransactionSale = new TransactionSale
@@ -70,9 +70,9 @@ namespace WarungkuTMG.Web.Controllers
                 Payment = new Payment()
             };
             
-            obj.TransactionSale.Details.Add(dummyDetail);
+            // obj.TransactionSale.Details.Add(dummyDetail);
             obj.TransactionSale.Total = obj.TransactionSale.Details.Sum(x => x.Price * x.Quantity);
-            
+            obj.Products = _productService.GetAllProducts();
             return View(obj);
         }
 

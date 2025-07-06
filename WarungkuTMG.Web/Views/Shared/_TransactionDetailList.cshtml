@@ -1,4 +1,7 @@
 @model TransactionSale
+@{
+    var showActions = ViewData["ShowActions"] as bool? ?? false;
+}
 
 <div id="TransactionDetailList">
     <table class="table table-bordered table-striped" id="detailsTable">
@@ -9,6 +12,11 @@
             <th>Quantity</th>
             <th>Price</th>
             <th>Subtotal</th>
+            @if (showActions)
+            {
+                <th>Action</th>
+            }
+
         </tr>
         </thead>
         <tbody>
@@ -44,6 +52,13 @@
                         @detail.Subtotal
                         <input type="hidden" name="TransactionSale.Details[@i].Subtotal" value="@detail.Subtotal" />
                     </td>
+                    @if (showActions)
+                    {
+                        <td>
+                            <button type="button" class="btn btn-danger btn-sm" onclick="removeDetail(this)">Remove</button>
+                        </td>
+                    }
+
                 </tr>
             }
         }

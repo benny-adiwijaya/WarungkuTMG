@@ -29,6 +29,7 @@
                     <div class="col-md-6">
                         <label class="form-label">Customer Name</label>
                         <input type="text" class="form-control" asp-for="TransactionSale.CustomerName"/>
+                        <span asp-validation-for="TransactionSale.CustomerName" class="text-danger"></span>
                     </div>
 
                     <div class="col-md-6">
@@ -81,13 +82,56 @@
                         </div>
                     </div>
                 </div>
-                <partial name="_TransactionDetailList" model="Model.TransactionSale"/>
+                
+                <div class="d-flex justify-content-between align-items-center mt-3 mb-3">
+                    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#addDetailModal">
+                        Add Item
+                    </button>
+                </div>
+
+                <partial name="_TransactionDetailList" model="Model.TransactionSale" view-data='new ViewDataDictionary(ViewData) { { "ShowActions", true } }'/>
             </div>
         </div>
     </form>
-
-    
 </div>
+
+<div class="modal fade" id="addDetailModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Product</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Product</label>
+                    <select id="productSelect" class="form-select">
+                        <option value="">Select a product...</option>
+                        @foreach (var product in Model.Products)
+                        {
+                            <option value="@product.Id" 
+                                    data-price="@product.Price" 
+                                    data-name="@product.Name"
+                                    data-image-url="@product.ImageUrl">
+                                @product.Name - @product.Price
+                            </option>
+                        }
+                    </select>
+
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Quantity</label>
+                    <input type="number" class="form-control" id="quantityInput" min="1" value="1">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="addDetail()">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <div class="modal fade" id="cashModal" tabindex="-1">
     <div class="modal-dialog">
@@ -159,6 +203,7 @@
     </div>
 </div>
 @section scripts {
+    <partial name="_ValidationScriptsPartial" />
     <script>
         // Add this to your existing scripts section
         document.addEventListener('DOMContentLoaded', function() {
@@ -168,6 +213,13 @@
             const discountDisplay = document.getElementById('discountDisplay');
             const voucherDisplay = document.getElementById('voucherDisplay');
             const grandTotalDisplay = document.getElementById('grandTotalDisplay');
+
+            // if (discountInput) {
+            //     discountInput.addEventListener('input', updateTotal);
+            // }
+            // if (voucherInput) {
+            //     voucherInput.addEventListener('input', updateTotal);
+            // }
 
             function updateSummary() {
                 const total = parseFloat(totalDisplay.textContent) || 0;
@@ -212,6 +264,11 @@
         }
 
         function submitPayment() {
+            if (!validateForm()) {
+                event.preventDefault();
+                return false;
+            }
+
             const form = document.getElementById('transactionForm');
             const paymentType = document.getElementById('PaymentType').value;
 
@@ -298,6 +355,154 @@
             }
             input.value = value;
         }
+
+        function addDetail() {
+            const select = document.getElementById('productSelect');
+            const option = select.options[select.selectedIndex];
+            const quantity = parseInt(document.getElementById('quantityInput').value);
+
+            if (!select.value || quantity < 1) {
+                alert('Please select a product and enter a valid quantity');
+                return;
+            }
+
+            const productId = select.value;
+            const productName = option.dataset.name;
+            const price = parseFloat(option.dataset.price);
+            const imageUrl = option.dataset.imageUrl || '';
+            const subtotal = price * quantity;
+
+            const tbody = document.querySelector('#detailsTable tbody');
+            const rowIndex = tbody.children.length;
+            const hasActionColumn = document.querySelector('#detailsTable thead th:last-child').textContent.trim() === 'Action';
+
+            const tr = document.createElement('tr');
+            let html = `
+        <td>
+            ${imageUrl ? `<img src="${imageUrl}" alt="Product Image" width="100" style="border-radius:5px; border:1px solid #ccc;" />` : ''}
+            <input type="hidden" name="TransactionSale.Details[${rowIndex}].ProductId" value="${productId}">
+            <input type="hidden" name="TransactionSale.Details[${rowIndex}].Product.Id" value="${productId}">
+            <input type="hidden" name="TransactionSale.Details[${rowIndex}].Product.ImageUrl" value="${imageUrl}">
+        </td>
+        <td>
+            ${productName}
+            <input type="hidden" name="TransactionSale.Details[${rowIndex}].Product.Name" value="${productName}">
+        </td>
+        <td>
+            ${quantity}
+            <input type="hidden" name="TransactionSale.Details[${rowIndex}].Quantity" value="${quantity}">
+        </td>
+        <td>
+            ${price}
+            <input type="hidden" name="TransactionSale.Details[${rowIndex}].Price" value="${price}">
+        </td>
+        <td>
+            ${subtotal}
+            <input type="hidden" name="TransactionSale.Details[${rowIndex}].Subtotal" value="${subtotal}">
+        </td>`;
+
+            if (hasActionColumn) {
+                html += `
+        <td>
+            <button type="button" class="btn btn-danger btn-sm" onclick="removeDetail(this)">Remove</button>
+        </td>`;
+            }
+            tr.innerHTML = html;
+            tbody.appendChild(tr);
+
+            // Update total
+            updateTotal();
+
+            // Close modal and reset form
+            const modal = bootstrap.Modal.getInstance(document.getElementById('addDetailModal'));
+            modal.hide();
+            select.value = '';
+            document.getElementById('quantityInput').value = '1';
+        }
+
+        function removeDetail(button) {
+            const row = button.closest('tr');
+            row.remove();
+            updateTotal();
+        }
+
+        function updateTotal() {
+            let total = 0;
+            const rows = document.querySelectorAll('#detailsTable tbody tr');
+
+            // Calculate total from all rows
+            rows.forEach(row => {
+                const price = parseFloat(row.cells[3].textContent);  // Price is in 4th column
+                const quantity = parseInt(row.cells[2].textContent); // Quantity is in 3rd column
+                total += price * quantity;
+            });
+
+            // Update total display
+            document.getElementById('totalDisplay').textContent = total;
+
+            // Get discount and voucher values
+            const discountPercent = parseFloat(document.getElementById('discountInput').value) || 0;
+            const voucherAmount = parseFloat(document.getElementById('voucherInput').value) || 0;
+
+            // Calculate discount amount
+            const discountAmount = (total * discountPercent / 100);
+
+            // Calculate grand total
+            const grandTotal = total - discountAmount - voucherAmount;
+
+            // Update all summary displays
+            document.getElementById('totalDisplay').textContent = total.toFixed(2);
+            document.getElementById('discountDisplay').textContent = discountAmount.toFixed(2);
+            document.getElementById('voucherDisplay').textContent = `-${voucherAmount.toFixed(2)}`;
+            document.getElementById('grandTotalDisplay').textContent = grandTotal.toFixed(2);
+
+            // Update hidden inputs if they exist
+            createOrUpdateHiddenInput(document.getElementById('transactionForm'), 'TransactionSale.Total', total);
+            createOrUpdateHiddenInput(document.getElementById('transactionForm'), 'TransactionSale.DiscountAmount', discountAmount);
+            createOrUpdateHiddenInput(document.getElementById('transactionForm'), 'TransactionSale.VoucherAmount', voucherAmount);
+            createOrUpdateHiddenInput(document.getElementById('transactionForm'), 'TransactionSale.GrandTotal', grandTotal);
+
+            // Update payment modal grand total inputs
+            const grandTotalInputs = document.querySelectorAll('input[name="TransactionSale.GrandTotal"]');
+            grandTotalInputs.forEach(input => {
+                input.value = grandTotal;
+            });
+        }
+
+        function validateForm() {
+            const form = document.getElementById('transactionForm');
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+                // Trigger validation display
+                form.classList.add('was-validated');
+                return false;
+            }
+
+            const customerName = document.querySelector('[name="TransactionSale.CustomerName"]').value;
+            if (!customerName || customerName.trim() === '') {
+                alert('Please enter customer name');
+                return false;
+            }
+
+            const details = document.querySelectorAll('#detailsTable tbody tr');
+            if (details.length === 0) {
+                alert('Please add at least one product');
+                return false;
+            }
+
+            return true;
+        }
+
+        // Add the validation to your form
+        document.getElementById('transactionForm').onsubmit = function(event) {
+            if (!validateForm()) {
+                event.preventDefault();
+                return false;
+            }
+            return true;
+        };
+
 
 
     </script>
