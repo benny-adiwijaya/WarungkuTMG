@@ -6,6 +6,7 @@
     <tr>
         <th>Date</th>
         <th>User</th>
+        <th>Customer</th>
         <th>Total</th>
         <th>Discount</th>
         <th>Voucher</th>
@@ -19,6 +20,7 @@
         <tr>
             <td>@obj.CreatedDate?.ToString("f")</td>
             <td>@obj.UserLogin</td>
+            <td>@obj.CustomerName</td>
             <td>@Convert.ToInt32(obj.Total)</td>
             <td>@obj.DiscountPercentage%</td>
             <td>@Convert.ToInt32(obj.VoucherAmount)</td>

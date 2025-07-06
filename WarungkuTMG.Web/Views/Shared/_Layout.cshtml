@@ -46,7 +46,9 @@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
-            <partial name="_Notification" />
+            <div class="loading spinner" style="display:none; z-index: 9999;"></div>
+            <div class="loading-overlay" style="display:none; z-index: 9998;"></div>
+            <partial name="_Notification"/>
             @RenderBody()
         </main>
     </div>

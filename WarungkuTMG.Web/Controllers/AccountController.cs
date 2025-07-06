@@ -177,14 +177,14 @@ namespace WarungkuTMG.Web.Controllers
 
             return View(registerVM);
         }
-        
+        [Authorize(Roles = SD.Role_Administrator)]
         [Authorize]
         public IActionResult Index()
         {
             var users = _applicationUserService.GetAllUsers();
             return View(users);
         }
-        
+        [Authorize(Roles = SD.Role_Administrator)]
         public IActionResult Update(string applicationUserId)
         {
             ApplicationUser? user = _applicationUserService.GetUserById(applicationUserId);;
@@ -205,7 +205,7 @@ namespace WarungkuTMG.Web.Controllers
             };
             return View(obj);
         }
-        
+        [Authorize(Roles = SD.Role_Administrator)]
         [HttpPost]
         public async Task<IActionResult> Update(ApplicationUserVM obj)
         {
@@ -245,7 +245,7 @@ namespace WarungkuTMG.Web.Controllers
             });
             return View(obj);
         }
-        
+        [Authorize(Roles = SD.Role_Administrator)]
         public IActionResult Delete(string applicationUserId)
         {
             ApplicationUser? obj = _applicationUserService.GetUserById(applicationUserId);
@@ -256,7 +256,7 @@ namespace WarungkuTMG.Web.Controllers
             return View(obj);
         }
 
-
+        [Authorize(Roles = SD.Role_Administrator)]
         [HttpPost]
         public async Task<IActionResult> Delete(ApplicationUser obj)
         {

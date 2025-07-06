@@ -7,7 +7,7 @@
     <div class="card-header bg-danger bg-gradient ml-0 py-3">
         <div class="row">
             <div class="col-12 text-center">
-                <h2 class="text-white py-2">Transaction Create</h2>
+                <h2 class="text-white py-2">New Transaction</h2>
             </div>
         </div>
     </div>
@@ -413,6 +413,8 @@
                 createOrUpdateHiddenInput(form, 'Payment.EvidenceNumber', evidenceNo);
             }
 
+            $('.spinner, .loading-overlay').show();
+            
             // Close modals
             const modals = document.querySelectorAll('.modal');
             modals.forEach(modal => {

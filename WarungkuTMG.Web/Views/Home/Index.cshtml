@@ -2,7 +2,56 @@
     ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container py-4">
+    <!-- Welcome Section -->
+    <div class="p-5 mb-4 bg-light rounded-3">
+        <div class="container-fluid py-5">
+            <h1 class="display-5 fw-bold">Welcome to Warungku TMG</h1>
+            <p class="col-md-8 fs-4">Your complete point of sale solution for managing transactions, inventory, and customer sales.</p>
+            <a class="btn btn-primary btn-lg" asp-controller="TransactionSale" asp-action="Create">
+                <i class="bi bi-cart-plus"></i> New Transaction
+            </a>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row align-items-md-stretch mb-4">
+        <div class="col-md-6">
+            <div class="h-100 p-5 bg-danger bg-gradient text-white rounded-3">
+                <h2>Transaction Management</h2>
+                <p>Create new sales transactions, view transaction history, and manage payments.</p>
+                <div class="d-flex gap-2">
+                    <a class="btn btn-outline-light" asp-controller="TransactionSale" asp-action="Create">
+                        <i class="bi bi-plus-circle"></i> New Transaction
+                    </a>
+                    <a class="btn btn-outline-light" asp-controller="TransactionSale" asp-action="Index">
+                        <i class="bi bi-list"></i> View Transactions
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="h-100 p-5 bg-primary bg-gradient text-white rounded-3">
+                <h2>Inventory Control</h2>
+                <p>Manage your products, track inventory, and update product information.</p>
+                <a class="btn btn-outline-light" asp-controller="Product" asp-action="Index">
+                    <i class="bi bi-box"></i> Manage Products
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Section -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card border-info">
+                <div class="card-header bg-info text-white">
+                    <h4 class="mb-0"><i class="bi bi-question-circle"></i> Need Help?</h4>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">If you need assistance or have questions about using Warungku TMG, please contact benny.adiwijaya@yahoo.com</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

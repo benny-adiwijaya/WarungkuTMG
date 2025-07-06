@@ -14,7 +14,7 @@
             isAdmin = await UserManager.IsInRoleAsync(currentUser, "Administrator");
         }
         <li class="nav-item">
-            <a class="nav-link" href="#">Hello @UserManager.GetUserName(User)</a>
+            <a class="nav-link" href="#">Hi @UserManager.GetUserName(User)!</a>
         </li>
         @if (isAdmin)
         {
