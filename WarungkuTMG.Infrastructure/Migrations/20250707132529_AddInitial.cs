@@ -145,9 +145,9 @@ namespace WarungkuTMG.Infrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     TransactionSaleId = table.Column<int>(type: "int", nullable: false),
                     PaymentType = table.Column<int>(type: "int", nullable: false),
-                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    CashReceived = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    Change = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Amount = table.Column<decimal>(type: "decimal(18,0)", nullable: false),
+                    CashReceived = table.Column<decimal>(type: "decimal(18,0)", nullable: true),
+                    Change = table.Column<decimal>(type: "decimal(18,0)", nullable: true),
                     EvidenceNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -293,10 +293,10 @@ namespace WarungkuTMG.Infrastructure.Migrations
                 columns: new[] { "Id", "CreatedBy", "CreatedDate", "Description", "DisabledBy", "DisabledDate", "ImageUrl", "IsDisabled", "ModifiedBy", "ModifiedDate", "Name", "Price" },
                 values: new object[,]
                 {
-                    { 1, "admin", new DateTime(2025, 7, 7, 4, 25, 20, 584, DateTimeKind.Local).AddTicks(4825), "Nasi goreng dengan ayam dan sayuran", null, null, "/images/ProductImages/21fc1854-affb-466a-ad78-07a87a47c8df.jpeg", false, null, null, "Nasi Goreng", 15000m },
-                    { 2, "admin", new DateTime(2025, 7, 7, 4, 25, 20, 584, DateTimeKind.Local).AddTicks(4837), "Mie goreng dengan telur dan sayuran", null, null, "/images/ProductImages/f52d4323-b225-46db-9b28-423b347264aa.jpeg", false, null, null, "Mie Goreng", 10000m },
-                    { 3, "admin", new DateTime(2025, 7, 7, 4, 25, 20, 584, DateTimeKind.Local).AddTicks(4839), "Mie Ayam dengan ceker", null, null, "/images/ProductImages/f0d826df-896a-4dfe-ab0a-77b8dbf2c98e.jpeg", false, null, null, "Mie Ayam", 15000m },
-                    { 4, "admin", new DateTime(2025, 7, 7, 4, 25, 20, 584, DateTimeKind.Local).AddTicks(4841), "Pisang ambon terbaik", null, null, "/images/ProductImages/a7d7aac3-e107-4d99-872f-5fa953615873.jpeg", false, null, null, "Pisang Goreng", 5000m }
+                    { 1, "admin", new DateTime(2025, 7, 7, 20, 25, 27, 406, DateTimeKind.Local).AddTicks(6739), "Nasi goreng dengan ayam dan sayuran", null, null, "/images/ProductImages/21fc1854-affb-466a-ad78-07a87a47c8df.jpeg", false, null, null, "Nasi Goreng", 15000m },
+                    { 2, "admin", new DateTime(2025, 7, 7, 20, 25, 27, 406, DateTimeKind.Local).AddTicks(6763), "Mie goreng dengan telur dan sayuran", null, null, "/images/ProductImages/f52d4323-b225-46db-9b28-423b347264aa.jpeg", false, null, null, "Mie Goreng", 10000m },
+                    { 3, "admin", new DateTime(2025, 7, 7, 20, 25, 27, 406, DateTimeKind.Local).AddTicks(6765), "Mie Ayam dengan ceker", null, null, "/images/ProductImages/f0d826df-896a-4dfe-ab0a-77b8dbf2c98e.jpeg", false, null, null, "Mie Ayam", 15000m },
+                    { 4, "admin", new DateTime(2025, 7, 7, 20, 25, 27, 406, DateTimeKind.Local).AddTicks(6767), "Pisang ambon terbaik", null, null, "/images/ProductImages/a7d7aac3-e107-4d99-872f-5fa953615873.jpeg", false, null, null, "Pisang Goreng", 5000m }
                 });
 
             migrationBuilder.CreateIndex(

@@ -294,13 +294,13 @@ namespace WarungkuTMG.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,0)");
 
                     b.Property<decimal?>("CashReceived")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,0)");
 
                     b.Property<decimal?>("Change")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,0)");
 
                     b.Property<string>("CreatedBy")
                         .HasMaxLength(100)
@@ -400,7 +400,7 @@ namespace WarungkuTMG.Infrastructure.Migrations
                         {
                             Id = 1,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2025, 7, 7, 4, 25, 20, 584, DateTimeKind.Local).AddTicks(4825),
+                            CreatedDate = new DateTime(2025, 7, 7, 20, 25, 27, 406, DateTimeKind.Local).AddTicks(6739),
                             Description = "Nasi goreng dengan ayam dan sayuran",
                             ImageUrl = "/images/ProductImages/21fc1854-affb-466a-ad78-07a87a47c8df.jpeg",
                             IsDisabled = false,
@@ -411,7 +411,7 @@ namespace WarungkuTMG.Infrastructure.Migrations
                         {
                             Id = 2,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2025, 7, 7, 4, 25, 20, 584, DateTimeKind.Local).AddTicks(4837),
+                            CreatedDate = new DateTime(2025, 7, 7, 20, 25, 27, 406, DateTimeKind.Local).AddTicks(6763),
                             Description = "Mie goreng dengan telur dan sayuran",
                             ImageUrl = "/images/ProductImages/f52d4323-b225-46db-9b28-423b347264aa.jpeg",
                             IsDisabled = false,
@@ -422,7 +422,7 @@ namespace WarungkuTMG.Infrastructure.Migrations
                         {
                             Id = 3,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2025, 7, 7, 4, 25, 20, 584, DateTimeKind.Local).AddTicks(4839),
+                            CreatedDate = new DateTime(2025, 7, 7, 20, 25, 27, 406, DateTimeKind.Local).AddTicks(6765),
                             Description = "Mie Ayam dengan ceker",
                             ImageUrl = "/images/ProductImages/f0d826df-896a-4dfe-ab0a-77b8dbf2c98e.jpeg",
                             IsDisabled = false,
@@ -433,7 +433,7 @@ namespace WarungkuTMG.Infrastructure.Migrations
                         {
                             Id = 4,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2025, 7, 7, 4, 25, 20, 584, DateTimeKind.Local).AddTicks(4841),
+                            CreatedDate = new DateTime(2025, 7, 7, 20, 25, 27, 406, DateTimeKind.Local).AddTicks(6767),
                             Description = "Pisang ambon terbaik",
                             ImageUrl = "/images/ProductImages/a7d7aac3-e107-4d99-872f-5fa953615873.jpeg",
                             IsDisabled = false,

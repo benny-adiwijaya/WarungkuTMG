@@ -79,7 +79,6 @@ namespace WarungkuTMG.Web.Controllers
         [HttpPost]
         public IActionResult Create(TransactionCreateVM model)
         {
-            ModelState.Remove("Payment.TransactionSale");
 
             if (!ModelState.IsValid)
             {
